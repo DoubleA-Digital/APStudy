@@ -549,6 +549,7 @@
         <button class="tab" onclick="startQuiz('calc', 10)">Calc AB — 10 Q</button>
         <button class="tab" onclick="startQuiz('csa', 10)">CS A — 10 Q</button>
         <button class="tab" onclick="startQuiz('all', 25)">Full Practice — 25 Q</button>
+        <button class="tab" onclick="startQuiz('graph', 6)">📊 Graphs — 6 Q</button>
       </div>
       <div class="card quiz-card" id="quiz-container"></div>
     </section>
@@ -1714,6 +1715,7 @@ function startQuiz(filter, n) {
   let pool = QUIZ.slice();
   if (filter === 'calc') pool = pool.filter(q => q.subj === 'calc');
   else if (filter === 'csa') pool = pool.filter(q => q.subj === 'csa');
+  else if (filter === 'graph') pool = pool.filter(q => q.q.includes('<svg'));
   else if (filter && (filter.startsWith('cab-') || filter.startsWith('csa-'))) {
     pool = pool.filter(q => q.unit === filter);
     if (pool.length === 0) pool = QUIZ.slice();
