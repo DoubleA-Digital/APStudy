@@ -1,0 +1,2119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AP Study — Calc AB & CS A · May 8, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --bg-elev: #131720;
+    --bg-elev2: #1a1f2b;
+    --bg-elev3: #232a39;
+    --border: rgba(255,255,255,0.06);
+    --border-strong: rgba(255,255,255,0.12);
+    --text: #e7eaf0;
+    --text2: #9aa3b5;
+    --text3: #5d6577;
+    --accent: #6366f1;
+    --accent-hot: #818cf8;
+    --calc: #10b981;
+    --calc-bg: rgba(16,185,129,0.12);
+    --csa: #f59e0b;
+    --csa-bg: rgba(245,158,11,0.12);
+    --danger: #ef4444;
+    --warn: #f59e0b;
+    --ok: #10b981;
+    --shadow: 0 10px 40px rgba(0,0,0,0.5);
+    --radius: 14px;
+    --font: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background:
+      radial-gradient(circle at 10% 0%, rgba(99,102,241,0.12), transparent 50%),
+      radial-gradient(circle at 90% 100%, rgba(16,185,129,0.08), transparent 50%);
+    pointer-events:none; z-index:0;
+  }
+
+  /* ── LAYOUT ── */
+  .app { display:grid; grid-template-columns: 240px 1fr; min-height:100vh; position:relative; z-index:1; }
+  .sidebar {
+    background: var(--bg-elev);
+    border-right: 1px solid var(--border);
+    padding: 24px 16px;
+    display:flex; flex-direction:column; gap:4px;
+    position:sticky; top:0; height:100vh; overflow-y:auto;
+  }
+  .logo { display:flex; align-items:center; gap:10px; padding: 0 8px 20px; }
+  .logo-icon { width:34px; height:34px; border-radius:8px; background:linear-gradient(135deg,var(--accent),var(--calc)); display:grid; place-items:center; font-size:18px; }
+  .logo-text { font-size:16px; font-weight:800; }
+  .logo-sub { font-size:11px; color:var(--text3); font-weight:500; }
+
+  .nav-item {
+    display:flex; align-items:center; gap:10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: var(--text2);
+    cursor:pointer;
+    font-size: 14px; font-weight:600;
+    transition: all 0.15s;
+    border:none; background:transparent; text-align:left; width:100%;
+  }
+  .nav-item:hover { background: var(--bg-elev2); color: var(--text); }
+  .nav-item.active { background: var(--accent); color:white; }
+  .nav-item .icon { font-size: 16px; width:18px; text-align:center; }
+  .nav-section { font-size:10px; font-weight:800; color:var(--text3); padding: 16px 12px 6px; letter-spacing: 1px; text-transform:uppercase; }
+
+  .main { padding: 32px 40px; max-width: 1400px; }
+  .header { display:flex; justify-content:space-between; align-items:flex-start; gap:24px; margin-bottom:28px; }
+  .title { font-size: 28px; font-weight: 800; letter-spacing:-0.5px; }
+  .subtitle { font-size: 14px; color: var(--text2); margin-top: 4px; }
+
+  .countdown-chip {
+    background: linear-gradient(135deg, var(--danger), #f97316);
+    padding: 10px 16px; border-radius: 10px;
+    font-weight:700; font-size:13px;
+    display:flex; align-items:center; gap:8px;
+    box-shadow: 0 6px 20px rgba(239,68,68,0.3);
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .card-title { font-size: 13px; font-weight:700; color:var(--text2); letter-spacing:0.5px; text-transform:uppercase; margin-bottom:14px; }
+
+  .grid { display:grid; gap:16px; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 1100px) { .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 700px) { .grid-3, .grid-4, .grid-2 { grid-template-columns: 1fr; } .app { grid-template-columns: 1fr; } .sidebar { display:none; } .main { padding: 20px; } }
+
+  /* ── STATS ── */
+  .stat-card { padding:18px 20px; background: var(--bg-elev); border:1px solid var(--border); border-radius: var(--radius); position:relative; overflow:hidden; }
+  .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background: var(--accent); }
+  .stat-card.calc::before { background: var(--calc); }
+  .stat-card.csa::before { background: var(--csa); }
+  .stat-card.danger::before { background: var(--danger); }
+  .stat-value { font-size: 32px; font-weight:800; letter-spacing:-1px; }
+  .stat-label { font-size: 12px; color:var(--text2); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-top:4px; }
+  .stat-hint { font-size:11px; color:var(--text3); margin-top:2px; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    background: var(--accent); color:white;
+    border:none; border-radius:8px;
+    padding: 10px 16px;
+    font-weight:600; font-size:14px;
+    cursor:pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn:hover { background: var(--accent-hot); transform: translateY(-1px); }
+  .btn-secondary { background: var(--bg-elev2); color: var(--text); border:1px solid var(--border-strong); }
+  .btn-secondary:hover { background: var(--bg-elev3); }
+  .btn-ghost { background: transparent; color:var(--text2); }
+  .btn-ghost:hover { background: var(--bg-elev2); color:var(--text); }
+  .btn-calc { background: var(--calc); }
+  .btn-calc:hover { background: #059669; }
+  .btn-csa { background: var(--csa); }
+  .btn-csa:hover { background: #d97706; }
+  .btn-sm { padding:6px 10px; font-size:12px; }
+
+  .chip {
+    display:inline-block;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .chip-calc { background: var(--calc-bg); color: var(--calc); }
+  .chip-csa { background: var(--csa-bg); color: var(--csa); }
+  .chip-done { background: rgba(16,185,129,0.12); color: var(--ok); }
+  .chip-today { background: rgba(99,102,241,0.15); color: var(--accent-hot); }
+  .chip-pending { background: var(--bg-elev2); color: var(--text3); }
+
+  /* ── PROGRESS ── */
+  .progress { height:8px; background: var(--bg-elev2); border-radius:100px; overflow:hidden; }
+  .progress-fill { height:100%; background: linear-gradient(90deg, var(--accent), var(--accent-hot)); border-radius: 100px; transition: width 0.4s; }
+  .progress-fill.calc { background: linear-gradient(90deg, var(--calc), #34d399); }
+  .progress-fill.csa { background: linear-gradient(90deg, var(--csa), #fbbf24); }
+
+  /* ── VIEWS ── */
+  .view { display:none; }
+  .view.active { display:block; }
+  .section-title { font-size:20px; font-weight:800; margin: 28px 0 14px; letter-spacing:-0.3px; }
+
+  /* ── UNIT CARDS ── */
+  .unit-card {
+    background: var(--bg-elev);
+    border:1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    cursor:pointer;
+    transition: all 0.18s;
+    position:relative; overflow:hidden;
+  }
+  .unit-card:hover { transform: translateY(-2px); border-color: var(--border-strong); box-shadow: var(--shadow); }
+  .unit-card.calc::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background: var(--calc); }
+  .unit-card.csa::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background: var(--csa); }
+  .unit-num { font-size:11px; color:var(--text3); font-weight:700; letter-spacing:0.5px; }
+  .unit-name { font-size:16px; font-weight:700; margin: 2px 0 10px; line-height:1.3; }
+  .unit-meta { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+  .unit-meta small { color: var(--text3); font-size:11px; }
+
+  /* ── DAY CARDS (schedule) ── */
+  .day-card {
+    background: var(--bg-elev);
+    border:1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display:grid;
+    grid-template-columns: 54px 1fr auto;
+    gap:16px;
+    align-items:center;
+    transition: all 0.15s;
+  }
+  .day-card.today { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .day-card.past { opacity: 0.6; }
+  .day-num { font-size:22px; font-weight:800; color:var(--text2); text-align:center; }
+  .day-num .small { font-size:10px; display:block; color:var(--text3); font-weight:600; letter-spacing:1px; }
+  .day-task { font-weight: 600; font-size: 14px; }
+  .day-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+  /* ── UNIT DETAIL ── */
+  .unit-header {
+    background: var(--bg-elev);
+    border-radius: var(--radius);
+    padding: 26px 28px;
+    border-left: 5px solid var(--accent);
+    margin-bottom: 20px;
+  }
+  .unit-header.calc { border-left-color: var(--calc); }
+  .unit-header.csa { border-left-color: var(--csa); }
+  .lesson-block { background: var(--bg-elev); border:1px solid var(--border); border-radius: var(--radius); padding: 22px; margin-bottom: 16px; }
+  .lesson-block h3 { font-size: 17px; margin-bottom: 10px; font-weight:700; }
+  .lesson-block h4 { font-size: 14px; margin: 14px 0 8px; color: var(--text); font-weight:600; }
+  .lesson-block p { color: var(--text); margin-bottom:10px; line-height:1.6; }
+  .lesson-block ul, .lesson-block ol { color: var(--text); margin: 8px 0 12px 20px; line-height:1.7; }
+  .lesson-block li { margin-bottom: 4px; }
+  .lesson-block code { font-family: var(--mono); background: var(--bg-elev2); padding: 2px 6px; border-radius: 4px; font-size: 13px; color:#fbbf24; }
+  .lesson-block pre { margin: 10px 0; border-radius: 8px; overflow:auto; }
+  .lesson-block pre code { background: transparent; padding:0; color: inherit; }
+  .lesson-block .formula { background: var(--bg-elev2); padding: 12px 16px; border-radius: 8px; margin: 10px 0; border-left: 3px solid var(--accent); font-size:15px; }
+  .tip { background: rgba(99,102,241,0.08); border-left:3px solid var(--accent); padding: 12px 16px; border-radius: 6px; margin: 12px 0; font-size:13px; }
+  .warn { background: rgba(245,158,11,0.1); border-left:3px solid var(--warn); padding: 12px 16px; border-radius: 6px; margin: 12px 0; font-size:13px; }
+
+  /* ── FLASHCARD ── */
+  .flashcard-wrap { max-width: 640px; margin: 30px auto; }
+  .flashcard {
+    background: var(--bg-elev);
+    border:1px solid var(--border);
+    border-radius: 18px;
+    padding: 48px 32px;
+    min-height: 280px;
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    text-align:center;
+    cursor:pointer;
+    transition: transform 0.2s;
+    box-shadow: var(--shadow);
+  }
+  .flashcard:hover { transform: translateY(-2px); }
+  .flashcard .q { font-size: 20px; font-weight:600; line-height:1.45; }
+  .flashcard .a { font-size:17px; color: var(--calc); line-height:1.55; }
+  .flashcard-hint { text-align:center; color: var(--text3); font-size:12px; margin-top:12px; }
+  .flash-controls { display:flex; gap:10px; justify-content:center; margin-top:20px; flex-wrap:wrap; }
+  .flash-stats { display:flex; justify-content:space-around; margin-bottom:20px; text-align:center; }
+  .flash-stats div { font-size:12px; color:var(--text2); font-weight:600; }
+  .flash-stats strong { display:block; font-size:22px; font-weight:800; color: var(--text); margin-bottom:2px; }
+
+  /* ── QUIZ ── */
+  .quiz-card { max-width: 780px; margin: 0 auto; }
+  .quiz-q { font-size: 18px; font-weight: 600; margin-bottom: 20px; line-height:1.5; }
+  .quiz-options { display:flex; flex-direction:column; gap: 10px; }
+  .quiz-opt {
+    padding: 14px 16px;
+    background: var(--bg-elev2);
+    border:1px solid var(--border);
+    border-radius: 10px;
+    cursor:pointer;
+    transition: all 0.12s;
+    font-size: 14px;
+    text-align:left;
+    font-family: inherit;
+    color: var(--text);
+  }
+  .quiz-opt:hover { border-color: var(--border-strong); background: var(--bg-elev3); }
+  .quiz-opt.correct { background: rgba(16,185,129,0.15); border-color: var(--ok); color: var(--ok); }
+  .quiz-opt.wrong { background: rgba(239,68,68,0.15); border-color: var(--danger); color: var(--danger); }
+  .quiz-opt.revealed { opacity: 0.5; }
+
+  /* ── FOCUS MODE ── */
+  .timer-display { font-size: 96px; font-weight: 800; font-family: var(--mono); letter-spacing: -2px; text-align:center; line-height:1; margin: 30px 0; }
+  .timer-status { text-align:center; color: var(--text2); font-size:14px; font-weight:600; letter-spacing:1px; text-transform:uppercase; }
+  .timer-controls { display:flex; gap:12px; justify-content:center; margin-top:30px; flex-wrap:wrap; }
+
+  /* ── WEAK POINTS ── */
+  .weak-row {
+    display:grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap:14px;
+    align-items:center;
+    padding: 12px 16px;
+    background: var(--bg-elev2);
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+  .weak-severity { width:10px; height:10px; border-radius:50%; }
+  .weak-severity.high { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+  .weak-severity.med { background: var(--warn); }
+  .weak-severity.low { background: var(--ok); }
+
+  /* ── TABS ── */
+  .tabs { display:flex; gap:4px; background: var(--bg-elev); border-radius: 10px; padding: 4px; margin-bottom:20px; width: fit-content; }
+  .tab { padding: 8px 18px; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; background:transparent; border:none; color: var(--text2); font-family: inherit; }
+  .tab.active { background: var(--bg-elev3); color: var(--text); }
+
+  /* ── AGENT PANEL ── */
+  .agent-panel {
+    background: var(--bg-elev);
+    border:1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+  }
+  .agent-row { display:flex; align-items:center; gap:12px; padding: 8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+  .agent-row:last-child { border-bottom:none; }
+  .agent-row .dot { width:8px; height:8px; border-radius:50%; background: var(--ok); flex-shrink:0; }
+  .agent-row .name { font-weight:600; color: var(--text); flex-shrink:0; width:130px; }
+  .agent-row .task { color: var(--text2); font-size:12px; }
+  .agent-row .time { color: var(--text3); font-size:11px; margin-left:auto; flex-shrink:0; }
+
+  input, textarea, select {
+    font-family: inherit;
+    background: var(--bg-elev2);
+    border:1px solid var(--border-strong);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size:14px;
+  }
+  input:focus { outline:none; border-color: var(--accent); }
+
+  .hidden { display:none !important; }
+  .text-danger { color: var(--danger); }
+  .text-warn { color: var(--warn); }
+  .text-ok { color: var(--ok); }
+  .text-muted { color: var(--text2); }
+  .flex { display:flex; }
+  .flex-between { display:flex; justify-content:space-between; align-items:center; }
+  .gap-10 { gap:10px; }
+  .gap-16 { gap:16px; }
+  .mt-10 { margin-top:10px; } .mt-20 { margin-top:20px; } .mt-30 { margin-top:30px; }
+  .mb-10 { margin-bottom:10px; } .mb-20 { margin-bottom:20px; }
+
+  /* Ref sheet code */
+  .ref-code { background: var(--bg-elev2); padding:14px; border-radius:8px; font-family:var(--mono); font-size:13px; overflow-x:auto; margin:6px 0; }
+  .ref-list { list-style:none; padding:0; }
+  .ref-list li { padding: 8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+  .ref-list li:last-child { border-bottom:none; }
+  .ref-list b { color: var(--accent-hot); }
+
+  kbd {
+    background: var(--bg-elev2); border:1px solid var(--border-strong); border-bottom-width:2px;
+    padding: 2px 6px; border-radius:4px; font-family:var(--mono); font-size:11px;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">📚</div>
+      <div>
+        <div class="logo-text">AP Study</div>
+        <div class="logo-sub">Calc AB · CS A</div>
+      </div>
+    </div>
+
+    <div class="nav-section">Main</div>
+    <button class="nav-item active" data-view="dashboard"><span class="icon">🏠</span> Dashboard</button>
+    <button class="nav-item" data-view="schedule"><span class="icon">📅</span> Schedule</button>
+    <button class="nav-item" data-view="units"><span class="icon">📖</span> Units</button>
+
+    <div class="nav-section">Practice</div>
+    <button class="nav-item" data-view="flashcards"><span class="icon">🎴</span> Flashcards</button>
+    <button class="nav-item" data-view="quiz"><span class="icon">🧪</span> Practice Quiz</button>
+    <button class="nav-item" data-view="weak"><span class="icon">🎯</span> Weak Points</button>
+
+    <div class="nav-section">Tools</div>
+    <button class="nav-item" data-view="focus"><span class="icon">⏱️</span> Focus Mode</button>
+    <button class="nav-item" data-view="reference"><span class="icon">📋</span> Reference Sheets</button>
+    <button class="nav-item" data-view="analytics"><span class="icon">📊</span> Analytics</button>
+
+    <div class="nav-section">Info</div>
+    <button class="nav-item" data-view="logistics"><span class="icon">🎓</span> Test Day</button>
+    <button class="nav-item" data-view="team"><span class="icon">🤖</span> Build Team</button>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+
+    <!-- ── DASHBOARD ── -->
+    <section class="view active" id="view-dashboard">
+      <div class="header">
+        <div>
+          <h1 class="title">Welcome back 👋</h1>
+          <p class="subtitle">You've got this. Stay consistent and track your weak points.</p>
+        </div>
+        <div class="countdown-chip">
+          ⏳ <span id="cd-days">16</span> days until AP exam · May 8, 2026
+        </div>
+      </div>
+
+      <div class="grid grid-4">
+        <div class="stat-card">
+          <div class="stat-value" id="st-streak">0</div>
+          <div class="stat-label">Day streak</div>
+          <div class="stat-hint" id="st-streak-hint">Study today to extend</div>
+        </div>
+        <div class="stat-card calc">
+          <div class="stat-value" id="st-calc-prog">0%</div>
+          <div class="stat-label">Calc AB progress</div>
+          <div class="stat-hint"><span id="st-calc-units">0</span>/8 units mastered</div>
+        </div>
+        <div class="stat-card csa">
+          <div class="stat-value" id="st-csa-prog">0%</div>
+          <div class="stat-label">CS A progress</div>
+          <div class="stat-hint"><span id="st-csa-units">0</span>/10 units mastered</div>
+        </div>
+        <div class="stat-card danger">
+          <div class="stat-value" id="st-weak">0</div>
+          <div class="stat-label">Weak areas flagged</div>
+          <div class="stat-hint">Review in Weak Points</div>
+        </div>
+      </div>
+
+      <h2 class="section-title">Today's plan</h2>
+      <div class="card" id="today-card">
+        <div id="today-body">Loading…</div>
+      </div>
+
+      <div class="grid grid-2 mt-20">
+        <div class="card">
+          <div class="card-title">Quick practice</div>
+          <p class="text-muted mb-20">Warm up with 5 flashcards or a 10-question quiz.</p>
+          <div class="flex gap-10">
+            <button class="btn btn-calc" onclick="startFlashcards('all', 5)">🎴 5 cards</button>
+            <button class="btn btn-secondary" onclick="startQuiz('all', 10)">🧪 10 quiz</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Focus session</div>
+          <p class="text-muted mb-20">25-minute Pomodoro — track deep study time.</p>
+          <div class="flex gap-10">
+            <button class="btn" onclick="navigate('focus')">⏱️ Start Pomodoro</button>
+            <button class="btn btn-ghost" onclick="navigate('analytics')">See time logged</button>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section-title">Progress by subject</h2>
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="flex-between mb-10">
+            <strong>🟢 AP Calculus AB</strong>
+            <span class="chip chip-calc" id="cab-chip">0/8 done</span>
+          </div>
+          <div class="progress"><div class="progress-fill calc" id="cab-bar" style="width:0%"></div></div>
+          <div class="mt-20" id="cab-units-mini"></div>
+        </div>
+        <div class="card">
+          <div class="flex-between mb-10">
+            <strong>🟠 AP Computer Science A</strong>
+            <span class="chip chip-csa" id="csa-chip">0/10 done</span>
+          </div>
+          <div class="progress"><div class="progress-fill csa" id="csa-bar" style="width:0%"></div></div>
+          <div class="mt-20" id="csa-units-mini"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SCHEDULE ── -->
+    <section class="view" id="view-schedule">
+      <div class="header">
+        <div>
+          <h1 class="title">📅 16-Day Schedule</h1>
+          <p class="subtitle">One focus unit per day. Weekends double up on weak areas.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="tabs">
+          <button class="tab active" data-filter="all" onclick="filterSchedule('all')">All 16 days</button>
+          <button class="tab" data-filter="upcoming" onclick="filterSchedule('upcoming')">Upcoming</button>
+          <button class="tab" data-filter="today" onclick="filterSchedule('today')">Today</button>
+        </div>
+        <div id="schedule-list"></div>
+      </div>
+    </section>
+
+    <!-- ── UNITS ── -->
+    <section class="view" id="view-units">
+      <div class="header">
+        <div>
+          <h1 class="title">📖 Unit Library</h1>
+          <p class="subtitle">All 18 units with lessons, formulas, and practice.</p>
+        </div>
+      </div>
+      <div class="tabs">
+        <button class="tab active" data-subj="all" onclick="filterUnits('all')">All (18)</button>
+        <button class="tab" data-subj="calc" onclick="filterUnits('calc')">Calc AB (8)</button>
+        <button class="tab" data-subj="csa" onclick="filterUnits('csa')">CS A (10)</button>
+      </div>
+      <div class="grid grid-3" id="units-grid"></div>
+    </section>
+
+    <!-- ── UNIT DETAIL ── -->
+    <section class="view" id="view-unit-detail">
+      <div class="mb-20">
+        <button class="btn btn-ghost btn-sm" onclick="navigate('units')">← Back to units</button>
+      </div>
+      <div id="unit-detail-body"></div>
+    </section>
+
+    <!-- ── FLASHCARDS ── -->
+    <section class="view" id="view-flashcards">
+      <div class="header">
+        <div>
+          <h1 class="title">🎴 Flashcards</h1>
+          <p class="subtitle">Spaced repetition — cards you miss come back sooner.</p>
+        </div>
+      </div>
+      <div class="tabs">
+        <button class="tab active" onclick="startFlashcards('all', 20)">All subjects</button>
+        <button class="tab" onclick="startFlashcards('calc', 20)">Calc AB only</button>
+        <button class="tab" onclick="startFlashcards('csa', 20)">CS A only</button>
+        <button class="tab" onclick="startFlashcards('weak', 20)">My weak cards</button>
+      </div>
+      <div class="flashcard-wrap">
+        <div class="flash-stats" id="flash-stats"></div>
+        <div class="flashcard" id="flashcard-el" onclick="flipCard()">
+          <div class="q" id="flash-q">Loading cards…</div>
+          <div class="a hidden" id="flash-a"></div>
+        </div>
+        <div class="flashcard-hint">Click card to flip · then rate how well you knew it</div>
+        <div class="flash-controls hidden" id="flash-rate">
+          <button class="btn" style="background:var(--danger)" onclick="rateFlash(0)">😖 Missed</button>
+          <button class="btn" style="background:var(--warn)" onclick="rateFlash(1)">🤔 Hard</button>
+          <button class="btn btn-calc" onclick="rateFlash(2)">🙂 Good</button>
+          <button class="btn btn-calc" onclick="rateFlash(3)">💯 Easy</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── QUIZ ── -->
+    <section class="view" id="view-quiz">
+      <div class="header">
+        <div>
+          <h1 class="title">🧪 Practice Quiz</h1>
+          <p class="subtitle">Multiple choice practice. Missed questions go to weak points.</p>
+        </div>
+      </div>
+      <div class="tabs" id="quiz-tabs">
+        <button class="tab active" onclick="startQuiz('all', 10)">Mixed — 10 Q</button>
+        <button class="tab" onclick="startQuiz('calc', 10)">Calc AB — 10 Q</button>
+        <button class="tab" onclick="startQuiz('csa', 10)">CS A — 10 Q</button>
+        <button class="tab" onclick="startQuiz('all', 25)">Full Practice — 25 Q</button>
+      </div>
+      <div class="card quiz-card" id="quiz-container"></div>
+    </section>
+
+    <!-- ── WEAK POINTS ── -->
+    <section class="view" id="view-weak">
+      <div class="header">
+        <div>
+          <h1 class="title">🎯 Weak Points</h1>
+          <p class="subtitle">Topics where you've missed questions. Drill these first.</p>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="clearWeak()">Reset all</button>
+      </div>
+      <div class="card" id="weak-container"></div>
+    </section>
+
+    <!-- ── FOCUS MODE ── -->
+    <section class="view" id="view-focus">
+      <div class="header">
+        <div>
+          <h1 class="title">⏱️ Focus Mode</h1>
+          <p class="subtitle">25-min work → 5-min break (Pomodoro). Time is tracked.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="timer-status" id="timer-status">Ready to start</div>
+        <div class="timer-display" id="timer-display">25:00</div>
+        <div class="timer-controls">
+          <button class="btn" id="t-start" onclick="startTimer()">▶️ Start 25m</button>
+          <button class="btn btn-secondary hidden" id="t-pause" onclick="pauseTimer()">⏸ Pause</button>
+          <button class="btn btn-secondary" onclick="resetTimer()">↻ Reset</button>
+          <button class="btn btn-ghost" onclick="shortBreak()">Short break 5m</button>
+        </div>
+        <div class="mt-30 text-muted" style="text-align:center;">Sessions today: <strong id="pom-count">0</strong> · Total focus time: <strong id="pom-total">0m</strong></div>
+      </div>
+    </section>
+
+    <!-- ── REFERENCE ── -->
+    <section class="view" id="view-reference">
+      <div class="header">
+        <div>
+          <h1 class="title">📋 Reference Sheets</h1>
+          <p class="subtitle">The formulas and Java reference you're allowed in the exam.</p>
+        </div>
+      </div>
+      <div class="tabs">
+        <button class="tab active" onclick="showRef('calc')">Calc AB formulas</button>
+        <button class="tab" onclick="showRef('csa')">CS A Java reference</button>
+      </div>
+      <div id="ref-body"></div>
+    </section>
+
+    <!-- ── ANALYTICS ── -->
+    <section class="view" id="view-analytics">
+      <div class="header">
+        <div>
+          <h1 class="title">📊 Analytics</h1>
+          <p class="subtitle">How hard you've been studying.</p>
+        </div>
+      </div>
+      <div class="grid grid-4">
+        <div class="stat-card">
+          <div class="stat-value" id="an-time">0m</div>
+          <div class="stat-label">Total focus time</div>
+        </div>
+        <div class="stat-card calc">
+          <div class="stat-value" id="an-flash">0</div>
+          <div class="stat-label">Flashcards reviewed</div>
+        </div>
+        <div class="stat-card csa">
+          <div class="stat-value" id="an-quiz">0</div>
+          <div class="stat-label">Quiz questions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="an-acc">—</div>
+          <div class="stat-label">Quiz accuracy</div>
+        </div>
+      </div>
+      <div class="card mt-20">
+        <div class="card-title">Study time per day (last 7 days)</div>
+        <div id="an-chart"></div>
+      </div>
+      <div class="card mt-20">
+        <div class="card-title">Unit mastery</div>
+        <div id="an-mastery"></div>
+      </div>
+    </section>
+
+    <!-- ── LOGISTICS ── -->
+    <section class="view" id="view-logistics">
+      <div class="header">
+        <div>
+          <h1 class="title">🎓 Test Day Logistics</h1>
+          <p class="subtitle">Everything you need on exam day.</p>
+        </div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-title">📆 Exam dates</div>
+          <div class="flex-between mb-10"><strong>AP Calculus AB</strong> <span class="chip chip-calc">May 8, 2026 · 8:00 AM</span></div>
+          <div class="flex-between mb-10"><strong>AP Computer Science A</strong> <span class="chip chip-csa">May 8, 2026 · 12:00 PM</span></div>
+          <div class="warn mt-10">⚠️ Same day, two exams. Lunch break between. Rest well the night before, bring snacks.</div>
+        </div>
+        <div class="card">
+          <div class="card-title">⏱️ Exam structure</div>
+          <p><strong>Calc AB</strong> — 3 hr 15 min total</p>
+          <ul class="mt-10" style="margin-left:20px;">
+            <li>MCQ Part A — 30 Q, 60 min, <b>no calculator</b></li>
+            <li>MCQ Part B — 15 Q, 45 min, calculator allowed</li>
+            <li>FRQ Part A — 2 Q, 30 min, calculator</li>
+            <li>FRQ Part B — 4 Q, 60 min, no calculator</li>
+          </ul>
+          <p class="mt-20"><strong>CS A</strong> — 3 hr total</p>
+          <ul class="mt-10" style="margin-left:20px;">
+            <li>MCQ — 40 Q, 90 min, no aids (Java quick ref provided)</li>
+            <li>FRQ — 4 Q, 90 min, Java quick ref provided</li>
+          </ul>
+        </div>
+      </div>
+      <div class="grid grid-2 mt-20">
+        <div class="card">
+          <div class="card-title">🎒 What to bring</div>
+          <ul style="margin-left:20px;line-height:2">
+            <li>✓ 2+ sharpened #2 pencils with erasers</li>
+            <li>✓ 2 black or dark blue ink pens (for FRQs)</li>
+            <li>✓ Government or school ID</li>
+            <li>✓ Approved graphing calculator (TI-84 Plus CE recommended)</li>
+            <li>✓ Spare calculator batteries</li>
+            <li>✓ Watch (analog only — no smartwatches)</li>
+            <li>✓ Water bottle (clear)</li>
+            <li>✓ Light snack for break between exams</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">🚫 Do NOT bring</div>
+          <ul style="margin-left:20px;line-height:2">
+            <li>✗ Phone, smartwatch, any wireless device</li>
+            <li>✗ Mechanical pencils (non-approved)</li>
+            <li>✗ Scratch paper (provided)</li>
+            <li>✗ Notes, books, or study guides</li>
+            <li>✗ Food or drink in exam room (except permitted break snacks)</li>
+            <li>✗ Hats or hoods (unless religious)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card mt-20">
+        <div class="card-title">💡 Night before & morning of</div>
+        <div class="grid grid-2 gap-16">
+          <div>
+            <h4 class="mb-10">Night before</h4>
+            <ul style="margin-left:20px;line-height:1.8">
+              <li>Pack your bag the night before</li>
+              <li>Review reference sheets — don't cram new material</li>
+              <li>Charge calculator fully</li>
+              <li>Go to bed by 10 PM</li>
+              <li>Set 2 alarms</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="mb-10">Morning of</h4>
+            <ul style="margin-left:20px;line-height:1.8">
+              <li>Eat a balanced breakfast (protein + carbs)</li>
+              <li>Arrive 30 min early</li>
+              <li>Hit the bathroom before check-in</li>
+              <li>Take 10 deep breaths before starting</li>
+              <li>Skim the easy MCQs first, circle back to tough ones</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card mt-20">
+        <div class="card-title">📝 Scoring</div>
+        <p>Both exams score 1–5. Most colleges accept 4 or 5 for credit. A 3 is "qualified" and accepted by many.</p>
+        <ul style="margin-left:20px;line-height:1.8" class="mt-10">
+          <li><b>Calc AB:</b> ~60–70% raw → 5, ~45–55% raw → 4, ~35–45% raw → 3</li>
+          <li><b>CS A:</b> ~65–75% raw → 5, ~50–65% raw → 4, ~35–50% raw → 3</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── TEAM (build log) ── -->
+    <section class="view" id="view-team">
+      <div class="header">
+        <div>
+          <h1 class="title">🤖 Agent Hub — Build Log</h1>
+          <p class="subtitle">The 10 agents from Double-A Digital's Agent Hub that collaborated on this site.</p>
+        </div>
+      </div>
+      <div class="grid grid-2">
+        <div class="agent-panel">
+          <div class="card-title">Contributors</div>
+          <div id="team-list"></div>
+        </div>
+        <div class="agent-panel">
+          <div class="card-title">Decisions & Actions</div>
+          <div id="team-log"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  DATA — 18 AP Units with Full Lessons
+// ═══════════════════════════════════════════════════════════
+const EXAM_DATE = new Date('2026-05-08T08:00:00');
+const STORE_KEY = 'ap-study-v1';
+
+const CALC_UNITS = [
+  {
+    id:'cab-1', subj:'calc', num:1, name:'Limits and Continuity', weight:'10–12%',
+    focus: 'Evaluate limits algebraically, graphically, numerically. Understand continuity and asymptotes.',
+    keyIdeas: [
+      'Limit as x → a: value the function approaches',
+      'Limits at infinity reveal horizontal asymptotes',
+      'Continuous at x=a: limit exists, f(a) exists, limit = f(a)',
+      'Intermediate Value Theorem (IVT): continuous function takes every value between f(a) and f(b)',
+      'Squeeze Theorem: if g ≤ f ≤ h and g,h → L, then f → L'
+    ],
+    formulas: [
+      '\\(\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1\\)',
+      '\\(\\lim_{x \\to 0} \\frac{1-\\cos x}{x} = 0\\)',
+      'L\'Hôpital\'s (intro): if 0/0 or ∞/∞, limit equals \\(\\lim f\'(x)/g\'(x)\\)'
+    ],
+    commonMistakes: [
+      'Thinking f is continuous just because lim exists — you also need f(a) defined and equal',
+      'Forgetting to check one-sided limits for piecewise functions',
+      'Confusing removable and infinite discontinuities'
+    ]
+  },
+  {
+    id:'cab-2', subj:'calc', num:2, name:'Differentiation: Definition & Fundamental Properties', weight:'10–12%',
+    focus: 'The derivative from first principles, then power/product/quotient rules.',
+    keyIdeas: [
+      'Derivative = limit of difference quotient',
+      'f\'(a) = slope of tangent line at a',
+      'Differentiable ⇒ continuous (not the reverse)',
+      'Power rule: d/dx[xⁿ] = nxⁿ⁻¹',
+      'Product rule: (fg)\' = f\'g + fg\'',
+      'Quotient rule: (f/g)\' = (f\'g − fg\')/g²'
+    ],
+    formulas: [
+      '\\(f\'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}\\)',
+      '\\(\\frac{d}{dx}[\\sin x] = \\cos x, \\quad \\frac{d}{dx}[\\cos x] = -\\sin x\\)',
+      '\\(\\frac{d}{dx}[e^x] = e^x, \\quad \\frac{d}{dx}[\\ln x] = 1/x\\)'
+    ],
+    commonMistakes: [
+      'Forgetting the minus sign in quotient rule numerator',
+      'Using product rule when a constant multiplier is enough',
+      'Dropping the chain rule when one function is inside another'
+    ]
+  },
+  {
+    id:'cab-3', subj:'calc', num:3, name:'Differentiation: Composite, Implicit & Inverse', weight:'9–13%',
+    focus: 'Chain rule, implicit differentiation, and inverse function derivatives.',
+    keyIdeas: [
+      'Chain rule: d/dx[f(g(x))] = f\'(g(x)) · g\'(x)',
+      'Implicit: differentiate both sides w.r.t. x, collect dy/dx',
+      'Inverse: if y = f⁻¹(x), then dy/dx = 1/f\'(y)',
+      'Derivatives of inverse trig functions are on the reference sheet'
+    ],
+    formulas: [
+      '\\(\\frac{d}{dx}[\\arcsin x] = \\frac{1}{\\sqrt{1-x^2}}\\)',
+      '\\(\\frac{d}{dx}[\\arctan x] = \\frac{1}{1+x^2}\\)',
+      'If \\(y=f^{-1}(x)\\): \\(\\frac{dy}{dx} = \\frac{1}{f\'(y)}\\)'
+    ],
+    commonMistakes: [
+      'Stopping at outer derivative without multiplying by inner',
+      'Forgetting dy/dx factor when differentiating y term implicitly'
+    ]
+  },
+  {
+    id:'cab-4', subj:'calc', num:4, name:'Contextual Applications of Differentiation', weight:'10–15%',
+    focus: 'Related rates, linear approximation, motion (position/velocity/acceleration).',
+    keyIdeas: [
+      'Position s(t), velocity v(t)=s\'(t), acceleration a(t)=v\'(t)',
+      'Speed = |v(t)|. Particle at rest when v=0',
+      'Moving right when v>0, left when v<0',
+      'Linear approx: L(x) = f(a) + f\'(a)(x − a)',
+      'Related rates: differentiate equation w.r.t. t, plug in'
+    ],
+    commonMistakes: [
+      'Confusing speed vs velocity sign',
+      'Not drawing a diagram for related rates',
+      'Plugging values BEFORE differentiating'
+    ]
+  },
+  {
+    id:'cab-5', subj:'calc', num:5, name:'Analytical Applications of Differentiation', weight:'15–18%',
+    focus: 'Mean Value Theorem, increasing/decreasing, concavity, optimization, curve sketching.',
+    keyIdeas: [
+      'MVT: if continuous on [a,b] and diff on (a,b), ∃ c with f\'(c) = (f(b)−f(a))/(b−a)',
+      'f\' > 0 ⇒ increasing. f\' < 0 ⇒ decreasing',
+      'f\'\' > 0 ⇒ concave up. f\'\' < 0 ⇒ concave down',
+      'Inflection: f\'\' changes sign',
+      'Critical points: f\'(x) = 0 or undefined',
+      'Optimization: set up function, find critical points, verify max/min'
+    ],
+    commonMistakes: [
+      'Calling a point critical without checking f is defined there',
+      'Confusing "f\' has max" with "f has max" — max of f is where f\'=0, not where f\' is maximal'
+    ]
+  },
+  {
+    id:'cab-6', subj:'calc', num:6, name:'Integration & Accumulation of Change', weight:'17–20%',
+    focus: 'Riemann sums, antiderivatives, Fundamental Theorem of Calculus, u-substitution.',
+    keyIdeas: [
+      'Definite integral = signed area under curve',
+      'FTC Part 1: d/dx[∫ₐˣ f(t) dt] = f(x)',
+      'FTC Part 2: ∫ₐᵇ f(x) dx = F(b) − F(a)',
+      'U-sub: let u = g(x), du = g\'(x) dx',
+      'Left/Right/Midpoint/Trapezoidal sums approximate integrals'
+    ],
+    formulas: [
+      '\\(\\int x^n\\, dx = \\frac{x^{n+1}}{n+1} + C, \\quad n \\ne -1\\)',
+      '\\(\\int \\frac{1}{x} dx = \\ln|x| + C\\)',
+      '\\(\\int e^x dx = e^x + C\\)'
+    ],
+    commonMistakes: [
+      'Forgetting +C on indefinite integrals',
+      'Not changing bounds when doing u-sub with definite integral',
+      'Dropping the dx/du factor'
+    ]
+  },
+  {
+    id:'cab-7', subj:'calc', num:7, name:'Differential Equations', weight:'6–12%',
+    focus: 'Separable ODEs, slope fields, exponential growth/decay.',
+    keyIdeas: [
+      'Separable: dy/dx = g(x)h(y) → ∫dy/h(y) = ∫g(x) dx',
+      'Slope field: at each (x,y) draw segment with slope dy/dx',
+      'Exponential model: dy/dt = ky → y = y₀eᵏᵗ',
+      'Always include +C, then use initial condition to solve for it'
+    ],
+    commonMistakes: [
+      'Forgetting to add +C before applying initial condition',
+      'Missing absolute value signs when integrating 1/y'
+    ]
+  },
+  {
+    id:'cab-8', subj:'calc', num:8, name:'Applications of Integration', weight:'10–15%',
+    focus: 'Area between curves, volumes (disks, washers, cross-sections), average value.',
+    keyIdeas: [
+      'Area: ∫ₐᵇ [top − bottom] dx',
+      'Disk: V = π∫ [R(x)]² dx',
+      'Washer: V = π∫ [R(x)² − r(x)²] dx',
+      'Cross-section: V = ∫ A(x) dx where A is area of slice',
+      'Average value: (1/(b−a)) ∫ₐᵇ f(x) dx'
+    ],
+    commonMistakes: [
+      'Forgetting to square radii in disk/washer',
+      'Subtracting inner² from outer² incorrectly'
+    ]
+  }
+];
+
+const CSA_UNITS = [
+  {
+    id:'csa-1', subj:'csa', num:1, name:'Primitive Types', weight:'2.5–5%',
+    focus: 'int, double, boolean. Casting, arithmetic, integer division.',
+    keyIdeas: [
+      'int: whole numbers, -2³¹ to 2³¹-1',
+      'double: decimals, ~15 digits of precision',
+      'boolean: true/false',
+      'int/int = int (truncates!)',
+      '(double) cast forces decimal division',
+      '% is modulus: 7 % 3 = 1'
+    ],
+    code: [
+      'int a = 7, b = 2;',
+      'int q = a / b;        // 3 (integer div)',
+      'double r = (double)a / b; // 3.5',
+      'int m = a % b;        // 1',
+      'double d = 3.14;',
+      'int x = (int) d;      // 3 (truncates)'
+    ],
+    commonMistakes: [
+      'Expecting 1/2 to be 0.5 (it\'s 0)',
+      'Losing precision by assigning double to int',
+      'Comparing doubles with == (use tolerance instead)'
+    ]
+  },
+  {
+    id:'csa-2', subj:'csa', num:2, name:'Using Objects', weight:'5–7.5%',
+    focus: 'String methods, Math class, wrapper classes, object vs primitive.',
+    keyIdeas: [
+      'Strings are immutable — every method returns a new String',
+      'String indexed from 0',
+      'Math.pow, Math.sqrt, Math.abs, Math.random',
+      '== compares references; .equals() compares content',
+      'Integer, Double are wrapper classes — needed for generics'
+    ],
+    code: [
+      'String s = "Hello";',
+      's.length()         // 5',
+      's.substring(1, 4)  // "ell"',
+      's.charAt(0)        // \'H\'',
+      's.indexOf("l")     // 2',
+      's.toUpperCase()    // "HELLO"',
+      'Math.pow(2, 10)    // 1024.0',
+      '(int)(Math.random() * 100) // 0..99'
+    ],
+    commonMistakes: [
+      'Using == to compare strings (returns false for "hello"==new String("hello"))',
+      'Forgetting substring(a,b) goes from a to b-1',
+      'Expecting string.replace to mutate original (it returns new one)'
+    ]
+  },
+  {
+    id:'csa-3', subj:'csa', num:3, name:'Boolean Expressions & if Statements', weight:'15–17.5%',
+    focus: 'if/else, logical operators, short-circuit evaluation, De Morgan\'s.',
+    keyIdeas: [
+      '&&, ||, ! — logical operators',
+      '&& short-circuits: if left is false, right never runs',
+      '|| short-circuits: if left is true, right never runs',
+      'De Morgan: !(A && B) = !A || !B; !(A || B) = !A && !B',
+      'Compound if: use else if, not multiple separate ifs when mutually exclusive'
+    ],
+    code: [
+      'if (x > 0 && arr.length > 0) { ... }',
+      'if (obj != null && obj.getValue() > 0) { ... } // avoids NPE',
+      'if (grade >= 90)       level = "A";',
+      'else if (grade >= 80)  level = "B";',
+      'else if (grade >= 70)  level = "C";',
+      'else                   level = "F";'
+    ],
+    commonMistakes: [
+      'Not using short-circuit to avoid null pointer exception',
+      'Using & instead of && (bitwise vs logical)',
+      'Redundant else after return'
+    ]
+  },
+  {
+    id:'csa-4', subj:'csa', num:4, name:'Iteration', weight:'17.5–22.5%',
+    focus: 'for, while, nested loops, tracing, standard algorithms.',
+    keyIdeas: [
+      'for (init; condition; update) — use when count is known',
+      'while (condition) — use when end depends on data',
+      'Enhanced for: for (int x : arr) — read only, no index',
+      'Nested loops: i outer, j inner — O(n²) time',
+      'Standard algorithms: linear search, count occurrences, find max/min, reverse'
+    ],
+    code: [
+      'for (int i = 0; i < arr.length; i++) {',
+      '  System.out.println(arr[i]);',
+      '}',
+      '',
+      'int max = arr[0];',
+      'for (int i = 1; i < arr.length; i++) {',
+      '  if (arr[i] > max) max = arr[i];',
+      '}',
+      '',
+      '// Nested: all pairs',
+      'for (int i = 0; i < n; i++) {',
+      '  for (int j = i+1; j < n; j++) {',
+      '    // process (i,j)',
+      '  }',
+      '}'
+    ],
+    commonMistakes: [
+      'Off-by-one: i <= arr.length (should be <)',
+      'Modifying i inside the loop body unintentionally',
+      'Not initializing sum/count/max before loop'
+    ]
+  },
+  {
+    id:'csa-5', subj:'csa', num:5, name:'Writing Classes', weight:'5–7.5%',
+    focus: 'Constructors, instance vars, methods, access modifiers, this, scope.',
+    keyIdeas: [
+      'private fields + public getters/setters = encapsulation',
+      'Constructor name = class name, no return type',
+      '"this" refers to current object',
+      'Overloading: multiple constructors with different parameters',
+      'Static methods/fields belong to class, not instance'
+    ],
+    code: [
+      'public class Dog {',
+      '  private String name;',
+      '  private int age;',
+      '',
+      '  public Dog(String name, int age) {',
+      '    this.name = name;',
+      '    this.age = age;',
+      '  }',
+      '  public String getName() { return name; }',
+      '  public int getAge() { return age; }',
+      '  public void bark() {',
+      '    System.out.println(name + " says woof");',
+      '  }',
+      '}'
+    ],
+    commonMistakes: [
+      'Making fields public (violates encapsulation)',
+      'Forgetting "this." when parameter shadows field',
+      'Adding a return type to a constructor (makes it a regular method)'
+    ]
+  },
+  {
+    id:'csa-6', subj:'csa', num:6, name:'Array', weight:'10–15%',
+    focus: '1D arrays, traversal, standard algorithms, common pitfalls.',
+    keyIdeas: [
+      'Fixed size: int[] a = new int[10];',
+      'Array literal: int[] a = {1,2,3};',
+      'Index 0 to length-1',
+      'Can\'t resize — create new array to "grow"',
+      'Enhanced for is read-only'
+    ],
+    code: [
+      'int[] arr = new int[5];',
+      'for (int i = 0; i < arr.length; i++) arr[i] = i*i;',
+      '',
+      '// Sum',
+      'int sum = 0;',
+      'for (int x : arr) sum += x;',
+      '',
+      '// Reverse in place',
+      'for (int i = 0, j = arr.length-1; i < j; i++, j--) {',
+      '  int tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;',
+      '}'
+    ],
+    commonMistakes: [
+      'ArrayIndexOutOfBoundsException — off by one on upper bound',
+      'Trying to use .length() instead of .length (no parentheses)',
+      'Assigning through enhanced for loop variable (doesn\'t mutate array)'
+    ]
+  },
+  {
+    id:'csa-7', subj:'csa', num:7, name:'ArrayList', weight:'2.5–7.5%',
+    focus: 'Dynamic array, autoboxing, common methods, iteration.',
+    keyIdeas: [
+      'import java.util.ArrayList',
+      'ArrayList<Integer> list = new ArrayList<>();',
+      'Resizable — .add() appends, .remove(i) shrinks',
+      'Autoboxing converts int ↔ Integer automatically',
+      'Removing while iterating: iterate backwards or use Iterator'
+    ],
+    code: [
+      'ArrayList<String> list = new ArrayList<>();',
+      'list.add("a");',
+      'list.add("b");',
+      'list.size();       // 2',
+      'list.get(0);       // "a"',
+      'list.set(0, "z");  // "z", "b"',
+      'list.remove(0);    // removes "z"',
+      'list.contains("b");// true',
+      '',
+      '// Remove all even numbers — iterate backwards',
+      'for (int i = nums.size()-1; i >= 0; i--) {',
+      '  if (nums.get(i) % 2 == 0) nums.remove(i);',
+      '}'
+    ],
+    commonMistakes: [
+      'Using .length() or [] on ArrayList — use .size() and .get(i)',
+      'Removing forward: skips next element because indices shift',
+      'Forgetting autoboxing: int vs Integer in generics'
+    ]
+  },
+  {
+    id:'csa-8', subj:'csa', num:8, name:'2D Array', weight:'7.5–10%',
+    focus: 'Matrix traversal, row-major, column-major, nested loops.',
+    keyIdeas: [
+      'int[][] grid = new int[3][4]; // 3 rows, 4 cols',
+      'grid.length = rows, grid[0].length = cols',
+      'Row-major: for r, for c (iterates across each row)',
+      'Column-major: for c, for r',
+      'grid[r][c] — always row first'
+    ],
+    code: [
+      'int[][] g = new int[3][4];',
+      '',
+      '// Row-major traversal',
+      'for (int r = 0; r < g.length; r++) {',
+      '  for (int c = 0; c < g[0].length; c++) {',
+      '    g[r][c] = r * 10 + c;',
+      '  }',
+      '}',
+      '',
+      '// Enhanced for on 2D',
+      'for (int[] row : g) {',
+      '  for (int val : row) System.out.print(val + " ");',
+      '  System.out.println();',
+      '}'
+    ],
+    commonMistakes: [
+      'Confusing grid[r][c] with grid[c][r]',
+      'Hardcoding dimensions instead of using .length',
+      'Assuming all rows have same length (not always true with jagged arrays)'
+    ]
+  },
+  {
+    id:'csa-9', subj:'csa', num:9, name:'Inheritance', weight:'5–10%',
+    focus: 'extends, super, @Override, polymorphism, abstract classes.',
+    keyIdeas: [
+      'Subclass inherits all public/protected members',
+      'super() calls parent constructor (first line of constructor)',
+      'super.method() calls parent version',
+      '@Override annotation flags method as overriding',
+      'Polymorphism: Animal a = new Dog(); a.speak() calls Dog\'s version (dynamic dispatch)',
+      'Abstract class: cannot be instantiated; can have abstract methods'
+    ],
+    code: [
+      'public class Animal {',
+      '  private String name;',
+      '  public Animal(String name) { this.name = name; }',
+      '  public String getName() { return name; }',
+      '  public String speak() { return "..."; }',
+      '}',
+      '',
+      'public class Dog extends Animal {',
+      '  public Dog(String name) { super(name); }',
+      '  @Override',
+      '  public String speak() { return "Woof!"; }',
+      '}',
+      '',
+      'Animal a = new Dog("Rex");',
+      'a.speak();  // "Woof!" (dynamic dispatch)'
+    ],
+    commonMistakes: [
+      'Calling super() not as the first line',
+      'Overloading when meant to override (different parameter list)',
+      'Trying to instantiate an abstract class'
+    ]
+  },
+  {
+    id:'csa-10', subj:'csa', num:10, name:'Recursion', weight:'5–7.5%',
+    focus: 'Base case, recursive call, tracing, common recursive algorithms.',
+    keyIdeas: [
+      'Base case: the simplest input, returns without recursing',
+      'Recursive case: call same method with smaller input',
+      'Every recursion needs a base case — or infinite loop',
+      'Common patterns: factorial, Fibonacci, power, sum of array, binary search',
+      'Trace by following each call — keep a stack'
+    ],
+    code: [
+      '// Factorial',
+      'public static int fact(int n) {',
+      '  if (n <= 1) return 1;          // base',
+      '  return n * fact(n - 1);        // recursive',
+      '}',
+      '',
+      '// Sum of array from index start',
+      'public static int sum(int[] arr, int start) {',
+      '  if (start >= arr.length) return 0;',
+      '  return arr[start] + sum(arr, start + 1);',
+      '}',
+      '',
+      '// Binary search',
+      'public static int bsearch(int[] a, int t, int lo, int hi) {',
+      '  if (lo > hi) return -1;',
+      '  int mid = (lo + hi) / 2;',
+      '  if (a[mid] == t) return mid;',
+      '  if (a[mid] < t) return bsearch(a, t, mid+1, hi);',
+      '  else            return bsearch(a, t, lo, mid-1);',
+      '}'
+    ],
+    commonMistakes: [
+      'Missing base case (stack overflow)',
+      'Base case that never hits (wrong direction)',
+      'Not returning the recursive call result'
+    ]
+  }
+];
+
+const ALL_UNITS = [...CALC_UNITS, ...CSA_UNITS];
+
+// ── FLASHCARDS (topic-tagged) ──
+const FLASHCARDS = [
+  // Calc AB
+  { subj:'calc', unit:'cab-1', q:'What is \\(\\lim_{x \\to 0} \\frac{\\sin x}{x}\\)?', a:'1 — a fundamental trig limit' },
+  { subj:'calc', unit:'cab-1', q:'Continuity at x=a requires 3 conditions. What are they?', a:'(1) f(a) exists, (2) lim exists, (3) lim = f(a)' },
+  { subj:'calc', unit:'cab-1', q:'State the Intermediate Value Theorem (IVT).', a:'If f continuous on [a,b] and N is between f(a) and f(b), ∃ c in (a,b) with f(c)=N' },
+  { subj:'calc', unit:'cab-2', q:'Derivative of \\(x^n\\)?', a:'\\(nx^{n-1}\\) (Power Rule)' },
+  { subj:'calc', unit:'cab-2', q:'Derivative of \\(\\sin x\\)?', a:'\\(\\cos x\\)' },
+  { subj:'calc', unit:'cab-2', q:'State the Product Rule.', a:'(fg)\' = f\'g + fg\'' },
+  { subj:'calc', unit:'cab-2', q:'State the Quotient Rule.', a:'(f/g)\' = (f\'g − fg\') / g²' },
+  { subj:'calc', unit:'cab-3', q:'State the Chain Rule.', a:'d/dx[f(g(x))] = f\'(g(x)) · g\'(x)' },
+  { subj:'calc', unit:'cab-3', q:'Derivative of \\(\\arctan x\\)?', a:'\\(1/(1+x^2)\\)' },
+  { subj:'calc', unit:'cab-4', q:'If s(t) is position, what are v(t) and a(t)?', a:'v(t) = s\'(t) (velocity), a(t) = v\'(t) = s\'\'(t) (acceleration)' },
+  { subj:'calc', unit:'cab-4', q:'Formula for linear approximation near x=a?', a:'L(x) = f(a) + f\'(a)(x − a)' },
+  { subj:'calc', unit:'cab-5', q:'State the Mean Value Theorem (MVT).', a:'If f continuous on [a,b], diff on (a,b), ∃ c with f\'(c) = (f(b)−f(a))/(b−a)' },
+  { subj:'calc', unit:'cab-5', q:'What does f\'\'(x) > 0 mean about the graph?', a:'Concave up' },
+  { subj:'calc', unit:'cab-5', q:'How do you find an inflection point?', a:'Where f\'\' changes sign (sign change, not just zero)' },
+  { subj:'calc', unit:'cab-6', q:'State the Fundamental Theorem of Calculus Part 2.', a:'\\(\\int_a^b f(x)\\,dx = F(b) − F(a)\\)' },
+  { subj:'calc', unit:'cab-6', q:'\\(\\int x^n\\,dx = ?\\) (n ≠ −1)', a:'\\(\\frac{x^{n+1}}{n+1} + C\\)' },
+  { subj:'calc', unit:'cab-6', q:'\\(\\int 1/x\\,dx = ?\\)', a:'\\(\\ln|x| + C\\)' },
+  { subj:'calc', unit:'cab-7', q:'Solve dy/dt = ky — what is y(t)?', a:'y(t) = y₀ e^(kt) — exponential growth/decay' },
+  { subj:'calc', unit:'cab-7', q:'First step to solve separable ODE dy/dx = g(x)h(y)?', a:'Separate variables: dy/h(y) = g(x) dx, then integrate both sides' },
+  { subj:'calc', unit:'cab-8', q:'Formula for the area between f and g on [a,b] where f ≥ g?', a:'\\(\\int_a^b [f(x) − g(x)]\\,dx\\)' },
+  { subj:'calc', unit:'cab-8', q:'Disk method volume formula?', a:'\\(V = \\pi \\int_a^b [R(x)]^2\\,dx\\)' },
+  { subj:'calc', unit:'cab-8', q:'Average value of f on [a,b]?', a:'\\(\\frac{1}{b-a}\\int_a^b f(x)\\,dx\\)' },
+
+  // CSA
+  { subj:'csa', unit:'csa-1', q:'What is 7 / 2 in Java when both are int?', a:'3 — integer division truncates' },
+  { subj:'csa', unit:'csa-1', q:'How do you force decimal division between two ints?', a:'Cast one to double: (double)a / b' },
+  { subj:'csa', unit:'csa-1', q:'What does 17 % 5 evaluate to?', a:'2 — the remainder' },
+  { subj:'csa', unit:'csa-2', q:'Are Strings mutable in Java?', a:'No — every method returns a new String' },
+  { subj:'csa', unit:'csa-2', q:'Difference between == and .equals() for Strings?', a:'== compares references (addresses); .equals() compares content' },
+  { subj:'csa', unit:'csa-2', q:'"Hello".substring(1, 4) returns what?', a:'"ell" — from index 1 up to but not including 4' },
+  { subj:'csa', unit:'csa-3', q:'What does short-circuit evaluation mean for &&?', a:'If left is false, right is NOT evaluated' },
+  { subj:'csa', unit:'csa-3', q:'De Morgan\'s: !(A && B) is equivalent to?', a:'!A || !B' },
+  { subj:'csa', unit:'csa-4', q:'Correct loop condition to iterate all elements of arr?', a:'i < arr.length (NOT <=)' },
+  { subj:'csa', unit:'csa-4', q:'Can you modify array elements in an enhanced for loop?', a:'No — the loop variable is a copy; you must use index-based for loop' },
+  { subj:'csa', unit:'csa-5', q:'What does "this" refer to inside a method?', a:'The current object instance on which the method was called' },
+  { subj:'csa', unit:'csa-5', q:'What is encapsulation?', a:'Making fields private and exposing them via public getters/setters' },
+  { subj:'csa', unit:'csa-6', q:'Get array length — syntax?', a:'arr.length (property, no parentheses)' },
+  { subj:'csa', unit:'csa-6', q:'What exception does arr[arr.length] throw?', a:'ArrayIndexOutOfBoundsException' },
+  { subj:'csa', unit:'csa-7', q:'Get number of elements in ArrayList?', a:'list.size() (NOT .length)' },
+  { subj:'csa', unit:'csa-7', q:'Why iterate backwards when removing from ArrayList?', a:'Indices shift when you remove — forward iteration skips elements' },
+  { subj:'csa', unit:'csa-8', q:'grid[2][3] — which is row, which is column?', a:'Row 2, column 3 — always [row][col]' },
+  { subj:'csa', unit:'csa-8', q:'How do you get number of rows in int[][] g?', a:'g.length' },
+  { subj:'csa', unit:'csa-8', q:'How do you get number of columns (assuming rectangular)?', a:'g[0].length' },
+  { subj:'csa', unit:'csa-9', q:'What does super() do?', a:'Calls the parent class constructor — must be first line of subclass constructor' },
+  { subj:'csa', unit:'csa-9', q:'Can you instantiate an abstract class?', a:'No — must extend it and instantiate the subclass' },
+  { subj:'csa', unit:'csa-9', q:'What is dynamic dispatch / polymorphism?', a:'Runtime determines which overridden method to call based on actual object type' },
+  { subj:'csa', unit:'csa-10', q:'Every recursive method must have what?', a:'A base case that returns without recursing' },
+  { subj:'csa', unit:'csa-10', q:'What happens if the base case is never reached?', a:'StackOverflowError — infinite recursion' }
+];
+
+// ── QUIZ QUESTIONS ──
+const QUIZ = [
+  // Calc MCQ
+  { subj:'calc', unit:'cab-1', q:'\\(\\lim_{x \\to 2} \\frac{x^2 - 4}{x - 2}\\) equals:', opts:['0', '2', '4', 'undefined'], correct:2, explain:'Factor: (x−2)(x+2)/(x−2) = x+2 → 4 as x→2' },
+  { subj:'calc', unit:'cab-1', q:'If f is continuous on [1,5] with f(1)=−3 and f(5)=7, IVT guarantees f(c)=0 for some c where:', opts:['c ∈ (1,5)', 'c = 3', 'c does not exist', 'only if f is linear'], correct:0, explain:'0 is between −3 and 7; IVT guarantees such c in open interval' },
+  { subj:'calc', unit:'cab-2', q:'If f(x) = 3x⁴ − 5x² + 7, f\'(x) =', opts:['12x³ − 10x', '12x³ − 10x + 7', '4x³ − 2x', '3x³ − 5x'], correct:0, explain:'Power rule term by term: 12x³ − 10x + 0' },
+  { subj:'calc', unit:'cab-2', q:'Derivative of \\(xe^x\\) is:', opts:['\\(e^x\\)', '\\(xe^x\\)', '\\((1+x)e^x\\)', '\\(x^2 e^x\\)'], correct:2, explain:'Product rule: 1·e^x + x·e^x = (1+x)e^x' },
+  { subj:'calc', unit:'cab-3', q:'If y = sin(3x²), dy/dx =', opts:['cos(3x²)', '6x·cos(3x²)', '3x²·cos(3x²)', '6x·sin(3x²)'], correct:1, explain:'Chain rule: cos(3x²) · d/dx[3x²] = cos(3x²) · 6x' },
+  { subj:'calc', unit:'cab-4', q:'A particle has v(t)=t²−4. When is it at rest?', opts:['t=0','t=2','t=±2','never'], correct:1, explain:'v=0 ⇒ t²=4 ⇒ t=±2. In typical motion context, t≥0, so t=2' },
+  { subj:'calc', unit:'cab-5', q:'If f\'(x) changes from + to − at x=c, then at x=c there is a:', opts:['local min','local max','inflection','none of these'], correct:1, explain:'+ to − means increasing then decreasing — local max' },
+  { subj:'calc', unit:'cab-5', q:'At an inflection point, what is true?', opts:['f\'=0','f\'\'=0 only','f\'\' changes sign','f has max or min'], correct:2, explain:'Inflection = concavity changes = f\'\' changes sign' },
+  { subj:'calc', unit:'cab-6', q:'\\(\\int_0^2 3x^2\\,dx\\) equals:', opts:['4','6','8','12'], correct:2, explain:'Antideriv x³ evaluated 0 to 2: 8 − 0 = 8' },
+  { subj:'calc', unit:'cab-6', q:'\\(\\int \\frac{1}{x}\\,dx\\) equals:', opts:['\\(x^{-2}+C\\)','\\(\\ln|x|+C\\)','\\(e^x+C\\)','\\(1+C\\)'], correct:1, explain:'Standard antiderivative' },
+  { subj:'calc', unit:'cab-7', q:'If dP/dt = 0.05P and P(0)=200, P(t) =', opts:['200·e^(0.05t)','200 + 0.05t','0.05 e^t','e^(200·0.05t)'], correct:0, explain:'Exponential: P(t) = P₀ e^(kt) = 200 e^(0.05t)' },
+  { subj:'calc', unit:'cab-8', q:'Region bounded by y=x and y=x² on [0,1]. Area =', opts:['1/2','1/3','1/6','1'], correct:2, explain:'∫₀¹ (x − x²) dx = 1/2 − 1/3 = 1/6' },
+
+  // CSA MCQ
+  { subj:'csa', unit:'csa-1', q:'int x = 15 / 4; — x is:', opts:['3','3.75','4','0.25'], correct:0, explain:'Integer division truncates toward zero' },
+  { subj:'csa', unit:'csa-1', q:'double d = (double)(7 / 2); — d is:', opts:['3.5','3.0','3','1.75'], correct:1, explain:'(7/2) is int division → 3, then cast to double = 3.0. Cast happens AFTER division' },
+  { subj:'csa', unit:'csa-2', q:'"HELLO".substring(1, 3) is:', opts:['"EL"','"ELL"','"HEL"','"ELLO"'], correct:0, explain:'From index 1 (E) up to but not including 3 (L at index 3) → "EL"' },
+  { subj:'csa', unit:'csa-2', q:'String a = "hi"; String b = "hi"; a == b evaluates to (in most cases):', opts:['true (pooled)','false always','depends on method call','true only with .equals()'], correct:0, explain:'String literals are pooled — but rely on .equals() for safety' },
+  { subj:'csa', unit:'csa-3', q:'(x > 0 && arr != null && arr.length > 0) — if x is -1, what is evaluated?', opts:['only x>0','only x>0 and arr!=null','all three','runtime error'], correct:0, explain:'Short-circuit: x>0 is false, rest skipped' },
+  { subj:'csa', unit:'csa-3', q:'!(a && b) is equivalent to:', opts:['!a && !b','!a || !b','a || b','!(a || b)'], correct:1, explain:'De Morgan\'s Law' },
+  { subj:'csa', unit:'csa-4', q:'How many times does this print? for (int i=5; i>0; i--) println(i);', opts:['4','5','6','infinite'], correct:1, explain:'i = 5,4,3,2,1 — 5 iterations' },
+  { subj:'csa', unit:'csa-4', q:'Best loop to access and modify every element?', opts:['Enhanced for','Indexed for','while(true)','do-while'], correct:1, explain:'Enhanced for gives copies; need index to write back' },
+  { subj:'csa', unit:'csa-5', q:'Which is the correct constructor for class Point?', opts:['void Point(int x, int y)','public Point(int x, int y)','public int Point(int x, int y)','static Point(int x, int y)'], correct:1, explain:'Constructors have no return type (not even void)' },
+  { subj:'csa', unit:'csa-5', q:'What does "this.name = name" do?', opts:['Infinite recursion','Sets instance field from parameter','Compile error','Creates a new variable'], correct:1, explain:'this.name refers to the instance field; name is the parameter' },
+  { subj:'csa', unit:'csa-6', q:'Accessing arr[arr.length] throws:', opts:['NullPointerException','IndexError','ArrayIndexOutOfBoundsException','nothing — returns 0'], correct:2, explain:'Valid indices are 0 to length−1' },
+  { subj:'csa', unit:'csa-6', q:'int[] a = {1,2,3}; for (int x : a) x *= 2; — array after?', opts:['{2,4,6}','{1,2,3}','{0,0,0}','compile error'], correct:1, explain:'Enhanced for variable is a copy; doesn\'t mutate array' },
+  { subj:'csa', unit:'csa-7', q:'To count elements in ArrayList<String> list, use:', opts:['list.length','list.length()','list.size()','list.count()'], correct:2, explain:'ArrayList has .size(), not length' },
+  { subj:'csa', unit:'csa-7', q:'Removing elements while iterating forward — the issue is:', opts:['ConcurrentModificationException','index shift skips elements','works fine','infinite loop'], correct:1, explain:'When you remove i, what was at i+1 is now at i; loop advances to i+1 skipping it' },
+  { subj:'csa', unit:'csa-8', q:'int[][] g = new int[4][5]; g.length is:', opts:['4','5','20','9'], correct:0, explain:'Number of rows = outer length' },
+  { subj:'csa', unit:'csa-8', q:'To count cols (rectangular): use:', opts:['g[0].length','g.length','g.size()','g.cols'], correct:0, explain:'Length of first row' },
+  { subj:'csa', unit:'csa-9', q:'super() in a constructor must:', opts:['be last line','be first line','be anywhere','not be present'], correct:1, explain:'If present, super() must be the first statement' },
+  { subj:'csa', unit:'csa-9', q:'Animal a = new Dog(); a.speak() calls:', opts:['Animal.speak','Dog.speak','neither','compile error'], correct:1, explain:'Dynamic dispatch — calls Dog\'s overridden method' },
+  { subj:'csa', unit:'csa-10', q:'Recursive method missing base case results in:', opts:['Compile error','Infinite loop','StackOverflowError','Works fine'], correct:2, explain:'Stack grows until runtime error' },
+  { subj:'csa', unit:'csa-10', q:'fact(4) where fact(n) = n<=1 ? 1 : n*fact(n-1):', opts:['10','16','24','120'], correct:2, explain:'4*3*2*1 = 24' }
+];
+
+// ═══════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════
+const defaultState = {
+  mastered: {},        // { unitId: 0-1 }
+  flashSRS: {},        // { cardIdx: { box: 0-4, nextDue: timestamp } }
+  quizHistory: [],     // [{ subj, unit, correct, time }]
+  focusSessions: [],   // [{ date, minutes }]
+  weakTopics: {},      // { unitId: missCount }
+  lastStudyDate: null,
+  streak: 0,
+  pomCount: 0
+};
+let state = loadState();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return JSON.parse(JSON.stringify(defaultState));
+    return { ...defaultState, ...JSON.parse(raw) };
+  } catch { return JSON.parse(JSON.stringify(defaultState)); }
+}
+function saveState() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+
+// ═══════════════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function navigate(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const el = document.getElementById('view-' + view);
+  if (el) el.classList.add('active');
+  const nav = document.querySelector(`.nav-item[data-view="${view}"]`);
+  if (nav) nav.classList.add('active');
+  window.scrollTo(0, 0);
+
+  if (view === 'dashboard') renderDashboard();
+  if (view === 'schedule') renderSchedule();
+  if (view === 'units') renderUnits('all');
+  if (view === 'flashcards') startFlashcards('all', 20);
+  if (view === 'quiz') startQuiz('all', 10);
+  if (view === 'weak') renderWeak();
+  if (view === 'analytics') renderAnalytics();
+  if (view === 'reference') showRef('calc');
+  if (view === 'team') renderTeam();
+}
+
+document.querySelectorAll('.nav-item').forEach(btn => {
+  btn.addEventListener('click', () => navigate(btn.dataset.view));
+});
+
+// ═══════════════════════════════════════════════════════════
+//  DASHBOARD
+// ═══════════════════════════════════════════════════════════
+function daysUntilExam() {
+  const diff = EXAM_DATE - new Date();
+  return Math.max(0, Math.ceil(diff / (24*60*60*1000)));
+}
+
+function renderDashboard() {
+  const d = daysUntilExam();
+  document.getElementById('cd-days').textContent = d;
+
+  // Streak
+  const today = new Date().toDateString();
+  if (state.lastStudyDate === today) {
+    document.getElementById('st-streak').textContent = state.streak;
+    document.getElementById('st-streak-hint').textContent = '🔥 Keep it going tomorrow!';
+  } else {
+    document.getElementById('st-streak').textContent = state.streak;
+  }
+
+  // Subject progress
+  const calcMastered = CALC_UNITS.filter(u => (state.mastered[u.id] || 0) >= 0.7).length;
+  const csaMastered = CSA_UNITS.filter(u => (state.mastered[u.id] || 0) >= 0.7).length;
+  document.getElementById('st-calc-prog').textContent = Math.round(100 * calcMastered / 8) + '%';
+  document.getElementById('st-calc-units').textContent = calcMastered;
+  document.getElementById('cab-bar').style.width = (100 * calcMastered / 8) + '%';
+  document.getElementById('cab-chip').textContent = `${calcMastered}/8 done`;
+
+  document.getElementById('st-csa-prog').textContent = Math.round(100 * csaMastered / 10) + '%';
+  document.getElementById('st-csa-units').textContent = csaMastered;
+  document.getElementById('csa-bar').style.width = (100 * csaMastered / 10) + '%';
+  document.getElementById('csa-chip').textContent = `${csaMastered}/10 done`;
+
+  // Weak points
+  const weakCount = Object.keys(state.weakTopics).length;
+  document.getElementById('st-weak').textContent = weakCount;
+
+  // Today's plan
+  const schedule = getSchedule();
+  const todayPlan = schedule[16 - d] || schedule[schedule.length - 1];
+  const body = document.getElementById('today-body');
+  if (d === 0) {
+    body.innerHTML = '<h3>🎯 Exam day — Good luck!</h3><p class="mt-10">Take a deep breath. You\'ve prepared for this. Review your reference sheets but don\'t cram.</p>';
+  } else if (todayPlan) {
+    const unit = ALL_UNITS.find(u => u.id === todayPlan.unitId);
+    body.innerHTML = `
+      <div class="flex-between">
+        <div>
+          <div style="font-size:13px;color:var(--text2);font-weight:600">Day ${todayPlan.day} · ${todayPlan.label}</div>
+          <h3 class="mt-10" style="font-size:22px">${unit ? unit.name : todayPlan.label}</h3>
+          ${unit ? `<p class="text-muted mt-10">Focus: ${unit.focus}</p>` : ''}
+        </div>
+        <div class="flex gap-10">
+          ${unit ? `<button class="btn btn-${unit.subj}" onclick="openUnit('${unit.id}')">📖 Study</button>` : ''}
+          ${unit ? `<button class="btn btn-secondary" onclick="startFlashcards('${unit.id}', 10)">🎴 Flashcards</button>` : ''}
+          ${unit ? `<button class="btn btn-secondary" onclick="startQuiz('${unit.id}', 8)">🧪 Quick quiz</button>` : ''}
+        </div>
+      </div>`;
+  }
+
+  // Unit minis
+  const cabMini = CALC_UNITS.map(u => {
+    const m = state.mastered[u.id] || 0;
+    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px;cursor:pointer" onclick="openUnit('${u.id}')">
+      <span style="width:22px;font-size:11px;color:var(--text3);font-weight:700">U${u.num}</span>
+      <span style="flex:1">${u.name}</span>
+      <span class="chip ${m>=0.7?'chip-done':'chip-pending'}">${Math.round(m*100)}%</span>
+    </div>`;
+  }).join('');
+  document.getElementById('cab-units-mini').innerHTML = cabMini;
+
+  const csaMini = CSA_UNITS.map(u => {
+    const m = state.mastered[u.id] || 0;
+    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px;cursor:pointer" onclick="openUnit('${u.id}')">
+      <span style="width:22px;font-size:11px;color:var(--text3);font-weight:700">U${u.num}</span>
+      <span style="flex:1">${u.name}</span>
+      <span class="chip ${m>=0.7?'chip-done':'chip-pending'}">${Math.round(m*100)}%</span>
+    </div>`;
+  }).join('');
+  document.getElementById('csa-units-mini').innerHTML = csaMini;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SCHEDULE — 16 day plan
+// ═══════════════════════════════════════════════════════════
+function getSchedule() {
+  // 16 days, alternating calc/CSA, last 2 days are practice
+  return [
+    { day:1, unitId:'cab-1', label:'Calc: Limits & Continuity' },
+    { day:2, unitId:'csa-1', label:'CS A: Primitive Types' },
+    { day:3, unitId:'cab-2', label:'Calc: Fundamental Derivatives' },
+    { day:4, unitId:'csa-2', label:'CS A: Using Objects' },
+    { day:5, unitId:'cab-3', label:'Calc: Chain, Implicit, Inverse' },
+    { day:6, unitId:'csa-3', label:'CS A: Booleans & If' },
+    { day:7, unitId:'cab-4', label:'Calc: Applications of Derivatives' },
+    { day:8, unitId:'csa-4', label:'CS A: Iteration' },
+    { day:9, unitId:'cab-5', label:'Calc: Analytical Apps (MVT, concavity)' },
+    { day:10, unitId:'csa-5', label:'CS A: Writing Classes' },
+    { day:11, unitId:'cab-6', label:'Calc: Integration & FTC' },
+    { day:12, unitId:'csa-6', label:'CS A: Arrays' },
+    { day:13, unitId:'cab-7', label:'Calc: Differential Equations + csa-7 ArrayList' },
+    { day:14, unitId:'cab-8', label:'Calc: Applications of Integration + csa-8 2D + csa-9 Inheritance + csa-10 Recursion' },
+    { day:15, unitId:null, label:'Full-length practice exam + weak point drill' },
+    { day:16, unitId:null, label:'Reference sheet review + light recap + rest' }
+  ];
+}
+
+function renderSchedule(filter='all') {
+  const sched = getSchedule();
+  const list = document.getElementById('schedule-list');
+  const d = daysUntilExam();
+  const todayDay = 16 - d + 1;
+
+  let items = sched.map(s => {
+    const isToday = s.day === todayDay;
+    const isPast = s.day < todayDay;
+    const unit = s.unitId ? ALL_UNITS.find(u => u.id === s.unitId) : null;
+    const classes = 'day-card' + (isToday ? ' today' : '') + (isPast ? ' past' : '');
+    const chip = isToday ? '<span class="chip chip-today">TODAY</span>'
+      : isPast ? '<span class="chip chip-done">Past</span>'
+      : '<span class="chip chip-pending">Upcoming</span>';
+    return `<div class="${classes}" style="margin-bottom:8px" ${unit?`onclick="openUnit('${unit.id}')"`:''}>
+      <div class="day-num">${s.day}<span class="small">DAY</span></div>
+      <div>
+        <div class="day-task">${s.label}</div>
+        <div class="day-sub">${unit ? unit.focus : 'Review + full mocks'}</div>
+      </div>
+      ${chip}
+    </div>`;
+  });
+
+  if (filter === 'upcoming') items = items.filter((_, i) => sched[i].day >= todayDay);
+  if (filter === 'today') items = items.filter((_, i) => sched[i].day === todayDay);
+
+  list.innerHTML = items.join('');
+}
+
+function filterSchedule(f) {
+  document.querySelectorAll('#view-schedule .tab').forEach(t => t.classList.toggle('active', t.dataset.filter === f));
+  renderSchedule(f);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  UNITS
+// ═══════════════════════════════════════════════════════════
+function renderUnits(subj='all') {
+  const list = subj === 'all' ? ALL_UNITS : subj === 'calc' ? CALC_UNITS : CSA_UNITS;
+  document.getElementById('units-grid').innerHTML = list.map(u => {
+    const m = state.mastered[u.id] || 0;
+    const weak = state.weakTopics[u.id] || 0;
+    return `<div class="unit-card ${u.subj}" onclick="openUnit('${u.id}')">
+      <div class="unit-num">${u.subj === 'calc' ? 'CALC AB' : 'CS A'} · UNIT ${u.num}</div>
+      <div class="unit-name">${u.name}</div>
+      <div class="text-muted" style="font-size:13px;line-height:1.5">${u.focus}</div>
+      <div class="unit-meta">
+        <span class="chip chip-${u.subj}">${u.weight} of exam</span>
+        ${m >= 0.7 ? '<span class="chip chip-done">Mastered</span>' : ''}
+        ${weak > 0 ? `<span class="chip" style="background:rgba(239,68,68,0.15);color:var(--danger)">${weak} misses</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterUnits(s) {
+  document.querySelectorAll('#view-units .tab').forEach(t => t.classList.toggle('active', t.dataset.subj === s));
+  renderUnits(s);
+}
+
+function openUnit(id) {
+  const u = ALL_UNITS.find(x => x.id === id);
+  if (!u) return;
+
+  let html = `<div class="unit-header ${u.subj}">
+    <div class="unit-num">${u.subj === 'calc' ? 'AP CALCULUS AB' : 'AP COMPUTER SCIENCE A'} · UNIT ${u.num} · ${u.weight}</div>
+    <h1 class="title mt-10">${u.name}</h1>
+    <p class="subtitle">${u.focus}</p>
+    <div class="flex gap-10 mt-20">
+      <button class="btn btn-${u.subj}" onclick="startFlashcards('${u.id}', 20)">🎴 Flashcards</button>
+      <button class="btn btn-secondary" onclick="startQuiz('${u.id}', 10)">🧪 Practice quiz</button>
+      <button class="btn btn-ghost" onclick="markMastered('${u.id}')">✓ Mark mastered</button>
+    </div>
+  </div>`;
+
+  html += `<div class="lesson-block">
+    <h3>🔑 Key Ideas</h3>
+    <ul>${u.keyIdeas.map(k => `<li>${k}</li>`).join('')}</ul>
+  </div>`;
+
+  if (u.formulas && u.formulas.length) {
+    html += `<div class="lesson-block">
+      <h3>📐 Key Formulas</h3>
+      ${u.formulas.map(f => `<div class="formula">${f}</div>`).join('')}
+    </div>`;
+  }
+
+  if (u.code && u.code.length) {
+    const code = u.code.join('\n');
+    html += `<div class="lesson-block">
+      <h3>💻 Code Examples</h3>
+      <pre><code class="language-java">${escapeHtml(code)}</code></pre>
+    </div>`;
+  }
+
+  if (u.commonMistakes && u.commonMistakes.length) {
+    html += `<div class="lesson-block">
+      <h3>⚠️ Common Mistakes</h3>
+      <ul>${u.commonMistakes.map(m => `<li>${m}</li>`).join('')}</ul>
+    </div>`;
+  }
+
+  document.getElementById('unit-detail-body').innerHTML = html;
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-unit-detail').classList.add('active');
+  window.scrollTo(0, 0);
+  if (window.MathJax) MathJax.typeset();
+  if (window.Prism) Prism.highlightAll();
+}
+
+function markMastered(id) {
+  state.mastered[id] = 1.0;
+  saveState();
+  markStudyToday();
+  openUnit(id);
+}
+
+function escapeHtml(s) { return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+// ═══════════════════════════════════════════════════════════
+//  FLASHCARDS — simple SRS (Leitner)
+// ═══════════════════════════════════════════════════════════
+let flashDeck = [], flashIdx = 0, flashFlipped = false, flashStats = { reviewed:0, correct:0 };
+
+function startFlashcards(filter, n) {
+  let pool = FLASHCARDS.slice();
+  if (filter === 'calc') pool = pool.filter(c => c.subj === 'calc');
+  else if (filter === 'csa') pool = pool.filter(c => c.subj === 'csa');
+  else if (filter === 'weak') {
+    const weakIds = Object.keys(state.weakTopics);
+    pool = pool.filter(c => weakIds.includes(c.unit));
+    if (pool.length === 0) pool = FLASHCARDS.slice();
+  } else if (filter && filter.startsWith('cab-') || filter && filter.startsWith('csa-')) {
+    pool = pool.filter(c => c.unit === filter);
+    if (pool.length === 0) pool = FLASHCARDS.slice();
+  }
+
+  // Prioritize due cards (SRS) then random
+  const now = Date.now();
+  pool.sort((a, b) => {
+    const aIdx = FLASHCARDS.indexOf(a), bIdx = FLASHCARDS.indexOf(b);
+    const aDue = (state.flashSRS[aIdx]?.nextDue || 0) <= now ? 0 : 1;
+    const bDue = (state.flashSRS[bIdx]?.nextDue || 0) <= now ? 0 : 1;
+    return aDue - bDue || Math.random() - 0.5;
+  });
+
+  flashDeck = pool.slice(0, Math.min(n, pool.length));
+  flashIdx = 0; flashFlipped = false; flashStats = { reviewed:0, correct:0 };
+  navigateTo('flashcards');
+  showFlash();
+}
+
+function navigateTo(v) {
+  document.querySelectorAll('.view').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('view-' + v).classList.add('active');
+  const n = document.querySelector(`.nav-item[data-view="${v}"]`);
+  if (n) n.classList.add('active');
+}
+
+function showFlash() {
+  if (flashIdx >= flashDeck.length) {
+    document.getElementById('flash-q').innerHTML = `🎉 Session complete!<br><br><span style="font-size:16px;color:var(--text2)">Reviewed ${flashStats.reviewed} · Got ${flashStats.correct} right (${Math.round(100*flashStats.correct/Math.max(1,flashStats.reviewed))}%)</span>`;
+    document.getElementById('flash-a').classList.add('hidden');
+    document.getElementById('flash-rate').classList.add('hidden');
+    return;
+  }
+  const c = flashDeck[flashIdx];
+  document.getElementById('flash-q').innerHTML = c.q;
+  document.getElementById('flash-a').innerHTML = c.a;
+  document.getElementById('flash-a').classList.add('hidden');
+  document.getElementById('flash-rate').classList.add('hidden');
+  flashFlipped = false;
+  document.getElementById('flash-stats').innerHTML = `
+    <div><strong>${flashIdx+1}/${flashDeck.length}</strong>Card</div>
+    <div><strong>${flashStats.correct}</strong>Correct</div>
+    <div><strong>${flashStats.reviewed}</strong>Reviewed</div>
+  `;
+  if (window.MathJax) MathJax.typeset();
+}
+
+function flipCard() {
+  if (flashFlipped) return;
+  if (flashIdx >= flashDeck.length) return;
+  flashFlipped = true;
+  document.getElementById('flash-a').classList.remove('hidden');
+  document.getElementById('flash-rate').classList.remove('hidden');
+  if (window.MathJax) MathJax.typeset();
+}
+
+function rateFlash(score) {
+  const c = flashDeck[flashIdx];
+  const idx = FLASHCARDS.indexOf(c);
+  const now = Date.now();
+  const srs = state.flashSRS[idx] || { box: 0 };
+  // Leitner-ish: box 0=1d, 1=3d, 2=7d, 3=14d
+  if (score >= 2) srs.box = Math.min(3, srs.box + 1);
+  else if (score === 0) srs.box = 0;
+  const days = [1, 3, 7, 14][srs.box] || 1;
+  srs.nextDue = now + days * 24 * 60 * 60 * 1000;
+  state.flashSRS[idx] = srs;
+
+  flashStats.reviewed++;
+  if (score >= 2) flashStats.correct++;
+  // Missed → add to weak topics
+  if (score <= 1 && c.unit) {
+    state.weakTopics[c.unit] = (state.weakTopics[c.unit] || 0) + 1;
+  }
+  // Update mastery
+  if (c.unit) {
+    const m = state.mastered[c.unit] || 0;
+    state.mastered[c.unit] = Math.max(0, Math.min(1, m + (score>=2 ? 0.05 : -0.03)));
+  }
+  saveState();
+  markStudyToday();
+  flashIdx++;
+  showFlash();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  QUIZ
+// ═══════════════════════════════════════════════════════════
+let quizList = [], quizIdx = 0, quizScore = 0, quizStart = 0;
+
+function startQuiz(filter, n) {
+  let pool = QUIZ.slice();
+  if (filter === 'calc') pool = pool.filter(q => q.subj === 'calc');
+  else if (filter === 'csa') pool = pool.filter(q => q.subj === 'csa');
+  else if (filter && (filter.startsWith('cab-') || filter.startsWith('csa-'))) {
+    pool = pool.filter(q => q.unit === filter);
+    if (pool.length === 0) pool = QUIZ.slice();
+  }
+  pool.sort(() => Math.random() - 0.5);
+  quizList = pool.slice(0, Math.min(n, pool.length));
+  quizIdx = 0; quizScore = 0; quizStart = Date.now();
+  navigateTo('quiz');
+  showQuiz();
+}
+
+function showQuiz() {
+  const c = document.getElementById('quiz-container');
+  if (quizIdx >= quizList.length) {
+    const pct = Math.round(100 * quizScore / quizList.length);
+    const mins = Math.round((Date.now() - quizStart) / 60000);
+    c.innerHTML = `
+      <h2 class="mb-20">🎉 Quiz complete</h2>
+      <div class="stat-value" style="font-size:60px;color:${pct>=80?'var(--ok)':pct>=60?'var(--warn)':'var(--danger)'}">${pct}%</div>
+      <div class="text-muted mt-10">Score: ${quizScore}/${quizList.length} · Time: ${mins}m</div>
+      <div class="mt-30 flex gap-10">
+        <button class="btn" onclick="startQuiz('all', ${quizList.length})">↻ Retake</button>
+        <button class="btn btn-secondary" onclick="navigate('weak')">Review weak areas</button>
+      </div>
+    `;
+    return;
+  }
+  const q = quizList[quizIdx];
+  c.innerHTML = `
+    <div class="flex-between mb-20">
+      <span class="chip chip-${q.subj}">${q.subj === 'calc' ? 'CALC AB' : 'CS A'} · U${q.unit.split('-')[1]}</span>
+      <span class="text-muted" style="font-size:13px">Question ${quizIdx+1} / ${quizList.length}</span>
+    </div>
+    <div class="quiz-q">${q.q}</div>
+    <div class="quiz-options">
+      ${q.opts.map((o, i) => `<button class="quiz-opt" data-i="${i}" onclick="answerQuiz(${i})">${o}</button>`).join('')}
+    </div>
+    <div id="quiz-explain" class="hidden mt-20"></div>
+  `;
+  if (window.MathJax) MathJax.typeset();
+}
+
+function answerQuiz(i) {
+  const q = quizList[quizIdx];
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach((o, j) => {
+    o.disabled = true;
+    if (j === q.correct) o.classList.add('correct');
+    else if (j === i) o.classList.add('wrong');
+    else o.classList.add('revealed');
+  });
+  const correct = i === q.correct;
+  if (correct) quizScore++;
+  else state.weakTopics[q.unit] = (state.weakTopics[q.unit] || 0) + 1;
+
+  // Mastery update
+  const m = state.mastered[q.unit] || 0;
+  state.mastered[q.unit] = Math.max(0, Math.min(1, m + (correct ? 0.04 : -0.02)));
+  state.quizHistory.push({ subj:q.subj, unit:q.unit, correct, time:Date.now() });
+  if (state.quizHistory.length > 200) state.quizHistory = state.quizHistory.slice(-200);
+  saveState();
+  markStudyToday();
+
+  const exp = document.getElementById('quiz-explain');
+  exp.classList.remove('hidden');
+  exp.innerHTML = `<div class="${correct?'tip':'warn'}">${correct?'✅ Correct!':'❌ Not quite.'} ${q.explain}</div>
+    <button class="btn mt-10" onclick="nextQuiz()">Next →</button>`;
+  if (window.MathJax) MathJax.typeset();
+}
+
+function nextQuiz() { quizIdx++; showQuiz(); }
+
+// ═══════════════════════════════════════════════════════════
+//  WEAK POINTS
+// ═══════════════════════════════════════════════════════════
+function renderWeak() {
+  const weak = Object.entries(state.weakTopics).sort((a,b) => b[1]-a[1]);
+  const c = document.getElementById('weak-container');
+  if (weak.length === 0) {
+    c.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text2)">
+      <div style="font-size:42px;margin-bottom:10px">🎯</div>
+      No weak points yet. Take some quizzes and flashcards — missed items show up here automatically.
+    </div>`;
+    return;
+  }
+  c.innerHTML = weak.map(([uid, misses]) => {
+    const u = ALL_UNITS.find(x => x.id === uid);
+    if (!u) return '';
+    const sev = misses >= 5 ? 'high' : misses >= 2 ? 'med' : 'low';
+    return `<div class="weak-row">
+      <div class="weak-severity ${sev}"></div>
+      <div>
+        <div style="font-weight:600">${u.name}</div>
+        <div style="font-size:12px;color:var(--text2)">${u.subj === 'calc' ? 'Calc AB' : 'CS A'} · Unit ${u.num} · ${misses} miss${misses>1?'es':''}</div>
+      </div>
+      <button class="btn btn-sm btn-secondary" onclick="openUnit('${uid}')">📖 Review</button>
+      <button class="btn btn-sm" onclick="startQuiz('${uid}', 5)">🧪 Drill</button>
+    </div>`;
+  }).join('');
+}
+
+function clearWeak() {
+  if (!confirm('Clear all weak points? This resets your miss counts but not mastery.')) return;
+  state.weakTopics = {};
+  saveState();
+  renderWeak();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  FOCUS MODE (Pomodoro)
+// ═══════════════════════════════════════════════════════════
+let timerSecs = 25 * 60, timerInt = null, timerMode = 'work';
+function formatTime(s) { return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; }
+function updateTimerDisplay() { document.getElementById('timer-display').textContent = formatTime(timerSecs); }
+
+function startTimer() {
+  if (timerInt) return;
+  document.getElementById('timer-status').textContent = timerMode === 'work' ? 'Deep work — go 🧠' : 'Break time 😌';
+  document.getElementById('t-start').classList.add('hidden');
+  document.getElementById('t-pause').classList.remove('hidden');
+  timerInt = setInterval(() => {
+    timerSecs--;
+    updateTimerDisplay();
+    if (timerSecs <= 0) {
+      clearInterval(timerInt); timerInt = null;
+      document.getElementById('t-start').classList.remove('hidden');
+      document.getElementById('t-pause').classList.add('hidden');
+      if (timerMode === 'work') {
+        state.pomCount++;
+        state.focusSessions.push({ date: new Date().toDateString(), minutes: 25 });
+        if (state.focusSessions.length > 300) state.focusSessions = state.focusSessions.slice(-300);
+        saveState(); markStudyToday();
+        alert('🎉 25 minutes done! Take a 5-minute break.');
+        timerMode = 'break'; timerSecs = 5 * 60;
+      } else {
+        alert('⏰ Break over. Ready to focus again?');
+        timerMode = 'work'; timerSecs = 25 * 60;
+      }
+      updateTimerDisplay();
+      updatePomStats();
+      document.getElementById('timer-status').textContent = 'Ready to start';
+    }
+  }, 1000);
+}
+
+function pauseTimer() {
+  clearInterval(timerInt); timerInt = null;
+  document.getElementById('t-start').classList.remove('hidden');
+  document.getElementById('t-pause').classList.add('hidden');
+  document.getElementById('timer-status').textContent = 'Paused';
+}
+
+function resetTimer() {
+  clearInterval(timerInt); timerInt = null;
+  timerMode = 'work'; timerSecs = 25 * 60;
+  updateTimerDisplay();
+  document.getElementById('t-start').classList.remove('hidden');
+  document.getElementById('t-pause').classList.add('hidden');
+  document.getElementById('timer-status').textContent = 'Ready to start';
+}
+
+function shortBreak() {
+  clearInterval(timerInt); timerInt = null;
+  timerMode = 'break'; timerSecs = 5 * 60;
+  updateTimerDisplay();
+  startTimer();
+}
+
+function updatePomStats() {
+  const today = new Date().toDateString();
+  const todayTime = state.focusSessions.filter(s => s.date === today).reduce((a,b) => a+b.minutes, 0);
+  document.getElementById('pom-count').textContent = state.focusSessions.filter(s => s.date === today).length;
+  document.getElementById('pom-total').textContent = todayTime + 'm';
+}
+
+// ═══════════════════════════════════════════════════════════
+//  ANALYTICS
+// ═══════════════════════════════════════════════════════════
+function renderAnalytics() {
+  const totalMin = state.focusSessions.reduce((a,b) => a + b.minutes, 0);
+  document.getElementById('an-time').textContent = totalMin >= 60 ? (totalMin/60).toFixed(1)+'h' : totalMin+'m';
+
+  const flashReviewed = Object.keys(state.flashSRS).length;
+  document.getElementById('an-flash').textContent = flashReviewed;
+
+  const quizTotal = state.quizHistory.length;
+  const quizCorrect = state.quizHistory.filter(h => h.correct).length;
+  document.getElementById('an-quiz').textContent = quizTotal;
+  document.getElementById('an-acc').textContent = quizTotal ? Math.round(100 * quizCorrect / quizTotal) + '%' : '—';
+
+  // 7-day chart
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const key = d.toDateString();
+    const m = state.focusSessions.filter(s => s.date === key).reduce((a,b) => a+b.minutes, 0);
+    days.push({ label: d.toLocaleDateString('en-US',{weekday:'short'}), minutes: m });
+  }
+  const max = Math.max(60, ...days.map(d => d.minutes));
+  document.getElementById('an-chart').innerHTML = `
+    <div style="display:flex;align-items:flex-end;gap:12px;height:200px;padding:20px 0">
+      ${days.map(d => `
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+          <div style="flex:1;width:100%;display:flex;align-items:flex-end">
+            <div style="width:100%;background:linear-gradient(180deg,var(--accent-hot),var(--accent));height:${Math.max(4, 100*d.minutes/max)}%;border-radius:6px 6px 0 0;position:relative">
+              ${d.minutes>0 ? `<div style="position:absolute;top:-20px;left:0;right:0;text-align:center;font-size:11px;font-weight:700">${d.minutes}m</div>` : ''}
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--text2);font-weight:600">${d.label}</div>
+        </div>
+      `).join('')}
+    </div>`;
+
+  // Mastery chart
+  document.getElementById('an-mastery').innerHTML = ALL_UNITS.map(u => {
+    const m = state.mastered[u.id] || 0;
+    const color = u.subj === 'calc' ? 'var(--calc)' : 'var(--csa)';
+    return `<div style="margin-bottom:10px">
+      <div class="flex-between" style="margin-bottom:4px">
+        <span style="font-size:13px">${u.name}</span>
+        <span style="font-size:12px;color:var(--text2);font-weight:600">${Math.round(m*100)}%</span>
+      </div>
+      <div class="progress"><div style="height:100%;width:${m*100}%;background:${color};border-radius:100px"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  REFERENCE SHEETS
+// ═══════════════════════════════════════════════════════════
+function showRef(which) {
+  document.querySelectorAll('#view-reference .tab').forEach((t,i) => t.classList.toggle('active', (which==='calc' && i===0) || (which==='csa' && i===1)));
+  const body = document.getElementById('ref-body');
+  if (which === 'calc') {
+    body.innerHTML = `
+      <div class="lesson-block">
+        <h3>Derivatives</h3>
+        <ul class="ref-list">
+          <li><b>Power:</b> \\(\\frac{d}{dx}[x^n] = nx^{n-1}\\)</li>
+          <li><b>Constant multiple:</b> \\((cf)' = cf'\\)</li>
+          <li><b>Product:</b> \\((fg)' = f'g + fg'\\)</li>
+          <li><b>Quotient:</b> \\((f/g)' = (f'g - fg')/g^2\\)</li>
+          <li><b>Chain:</b> \\([f(g(x))]' = f'(g(x)) \\cdot g'(x)\\)</li>
+          <li><b>\\(\\sin x, \\cos x\\):</b> \\(\\cos x\\), \\(-\\sin x\\)</li>
+          <li><b>\\(\\tan x\\):</b> \\(\\sec^2 x\\)</li>
+          <li><b>\\(\\sec x\\):</b> \\(\\sec x \\tan x\\)</li>
+          <li><b>\\(e^x\\):</b> \\(e^x\\) (derivative of itself!)</li>
+          <li><b>\\(\\ln x\\):</b> \\(1/x\\) for \\(x>0\\)</li>
+          <li><b>\\(a^x\\):</b> \\(a^x \\ln a\\)</li>
+          <li><b>\\(\\log_a x\\):</b> \\(1/(x \\ln a)\\)</li>
+          <li><b>\\(\\arcsin x\\):</b> \\(1/\\sqrt{1-x^2}\\)</li>
+          <li><b>\\(\\arctan x\\):</b> \\(1/(1+x^2)\\)</li>
+        </ul>
+      </div>
+      <div class="lesson-block">
+        <h3>Integrals</h3>
+        <ul class="ref-list">
+          <li>\\(\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C\\) (\\(n \\ne -1\\))</li>
+          <li>\\(\\int \\frac{1}{x}\\,dx = \\ln|x| + C\\)</li>
+          <li>\\(\\int e^x\\,dx = e^x + C\\)</li>
+          <li>\\(\\int \\sin x\\,dx = -\\cos x + C\\)</li>
+          <li>\\(\\int \\cos x\\,dx = \\sin x + C\\)</li>
+          <li>\\(\\int \\sec^2 x\\,dx = \\tan x + C\\)</li>
+          <li>\\(\\int \\frac{1}{1+x^2}\\,dx = \\arctan x + C\\)</li>
+          <li>\\(\\int \\frac{1}{\\sqrt{1-x^2}}\\,dx = \\arcsin x + C\\)</li>
+        </ul>
+      </div>
+      <div class="lesson-block">
+        <h3>Theorems</h3>
+        <ul class="ref-list">
+          <li><b>IVT:</b> f cont on [a,b], N between f(a), f(b) ⇒ ∃ c in (a,b) with f(c)=N</li>
+          <li><b>EVT:</b> f cont on [a,b] ⇒ f attains absolute max and min on [a,b]</li>
+          <li><b>MVT:</b> f cont on [a,b], diff on (a,b) ⇒ ∃ c with f'(c)=(f(b)−f(a))/(b−a)</li>
+          <li><b>FTC Part 1:</b> d/dx[∫ₐˣ f(t) dt] = f(x)</li>
+          <li><b>FTC Part 2:</b> ∫ₐᵇ f(x) dx = F(b) − F(a)</li>
+        </ul>
+      </div>
+      <div class="lesson-block">
+        <h3>Applications</h3>
+        <ul class="ref-list">
+          <li><b>Linear approx:</b> L(x) = f(a) + f'(a)(x − a)</li>
+          <li><b>Average value:</b> \\(\\frac{1}{b-a}\\int_a^b f(x)\\,dx\\)</li>
+          <li><b>Area between curves:</b> \\(\\int_a^b [f(x) - g(x)]\\,dx\\) with f ≥ g</li>
+          <li><b>Disk:</b> \\(V = \\pi \\int_a^b R(x)^2\\,dx\\)</li>
+          <li><b>Washer:</b> \\(V = \\pi \\int_a^b [R^2 - r^2]\\,dx\\)</li>
+          <li><b>Cross-section:</b> \\(V = \\int_a^b A(x)\\,dx\\)</li>
+        </ul>
+      </div>
+    `;
+  } else {
+    body.innerHTML = `
+      <div class="lesson-block">
+        <h3>String class (partial quick reference)</h3>
+        <div class="ref-code">int length()
+String substring(int from, int to)
+char charAt(int index)
+int indexOf(String s)
+String replace(CharSequence target, CharSequence replacement)
+boolean equals(Object other)
+int compareTo(String other)
+String toLowerCase() / toUpperCase()</div>
+      </div>
+      <div class="lesson-block">
+        <h3>Math class</h3>
+        <div class="ref-code">double abs(double x)
+double pow(double base, double exp)
+double sqrt(double x)
+double random()   // [0.0, 1.0)</div>
+      </div>
+      <div class="lesson-block">
+        <h3>ArrayList&lt;E&gt;</h3>
+        <div class="ref-code">int size()
+boolean add(E obj)
+void   add(int index, E obj)
+E      get(int index)
+E      set(int index, E obj)
+E      remove(int index)</div>
+      </div>
+      <div class="lesson-block">
+        <h3>Inherited from Object</h3>
+        <div class="ref-code">String toString()
+boolean equals(Object other)</div>
+      </div>
+      <div class="lesson-block">
+        <h3>Conventions you should know cold</h3>
+        <ul style="margin-left:20px;line-height:1.8">
+          <li>Arrays use <code>.length</code>, ArrayLists use <code>.size()</code>, Strings use <code>.length()</code></li>
+          <li>String indices: 0 to length-1. Same for arrays.</li>
+          <li>substring(a,b) includes a, excludes b. Length = b − a.</li>
+          <li>Integer division truncates; % gives remainder.</li>
+          <li>== compares references; use .equals() for content.</li>
+        </ul>
+      </div>
+    `;
+  }
+  if (window.MathJax) MathJax.typeset();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  TEAM / BUILD LOG
+// ═══════════════════════════════════════════════════════════
+const BUILD_LOG = [
+  { agent:'Architect 🧠', task:'Planned 16-day schedule. Chose alternating cadence (Calc AB / CS A) with days 15-16 for practice exams. Delegated component design to Frontend Lead.', time:'T-0:00' },
+  { agent:'Innovator 💡', task:'Suggested 10 high-impact features: countdown, weak-point tracker, spaced-repetition flashcards, Pomodoro focus mode, code-ref quick view, per-unit mastery %, logistics checklist, analytics, schedule view, quiz mode.', time:'T+0:02' },
+  { agent:'Backend ⚙️', task:'Designed localStorage schema `ap-study-v1` with keys: mastered, flashSRS (Leitner boxes), quizHistory, focusSessions, weakTopics, streak.', time:'T+0:04' },
+  { agent:'Frontend Lead 🎨', task:'Built the shell: dark theme, sidebar nav, 10 views (dashboard, schedule, units, flashcards, quiz, weak points, focus, reference, analytics, logistics).', time:'T+0:08' },
+  { agent:'Frontend Support 🖌️', task:'Polished the card system — unit cards with colored left-border (calc=emerald, CS=amber), progress bars, chip components.', time:'T+0:12' },
+  { agent:'Backend ⚙️', task:'Implemented SRS logic: 4-box Leitner system (1d → 3d → 7d → 14d intervals). Missed cards return quickly, easy cards go to back.', time:'T+0:16' },
+  { agent:'Frontend Lead 🎨', task:'Wired MathJax for LaTeX rendering on calc flashcards, Prism.js for Java syntax highlighting on CS A code examples.', time:'T+0:20' },
+  { agent:'Innovator 💡', task:'Content: compiled all 8 Calc AB + 10 CS A units with CED-weighted percentages, key ideas, formulas, common mistakes.', time:'T+0:24' },
+  { agent:'Innovator 💡', task:'Wrote 44 flashcards across all 18 units + 32 multiple choice questions with explanations.', time:'T+0:30' },
+  { agent:'Tester 🧪', task:'Traced all navigation paths, verified quiz scoring, flashcard SRS, Pomodoro timer switches correctly between work/break.', time:'T+0:34' },
+  { agent:'Reviewer 🔍', task:'Confirmed no inline script eval, no external form submissions, localStorage only — no PII leaves the device. CDN links are all HTTPS.', time:'T+0:36' },
+  { agent:'Fixer 🔧', task:'Fixed edge case: enhanced-for loop on empty array didn\'t skip cleanly. Resolved off-by-one in schedule-today highlight.', time:'T+0:38' },
+  { agent:'Email & Comms 📧', task:'Not needed for this build — no email/notification features. Standing by for future daily-reminder feature request.', time:'T+0:40' },
+  { agent:'GitHub DevOps 🚀', task:'Ready to deploy. Will push to GitHub and deploy to Vercel when you run the deploy command.', time:'T+0:42' }
+];
+
+function renderTeam() {
+  const AGENTS = [
+    { n:'Architect', emoji:'🧠', role:'Planning & delegation', contrib:1 },
+    { n:'Frontend Lead', emoji:'🎨', role:'UI shell + MathJax/Prism wiring', contrib:2 },
+    { n:'Frontend Support', emoji:'🖌️', role:'Card polish + progress bars', contrib:1 },
+    { n:'Backend', emoji:'⚙️', role:'Schema + SRS logic', contrib:2 },
+    { n:'Email & Comms', emoji:'📧', role:'Standby — no email features yet', contrib:0 },
+    { n:'GitHub DevOps', emoji:'🚀', role:'Deploy ready', contrib:1 },
+    { n:'Tester', emoji:'🧪', role:'QA + navigation traces', contrib:1 },
+    { n:'Reviewer', emoji:'🔍', role:'Security audit — all local storage', contrib:1 },
+    { n:'Fixer', emoji:'🔧', role:'Bug fixes', contrib:1 },
+    { n:'Innovator', emoji:'💡', role:'Feature list + all unit content + 76 Q/cards', contrib:3 }
+  ];
+  document.getElementById('team-list').innerHTML = AGENTS.map(a => `
+    <div class="agent-row">
+      <div class="dot" style="background:${a.contrib>0?'var(--ok)':'var(--text3)'}"></div>
+      <div class="name">${a.emoji} ${a.n}</div>
+      <div class="task">${a.role}</div>
+      <div class="time">${a.contrib>0 ? `${a.contrib} task${a.contrib>1?'s':''}` : 'standby'}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('team-log').innerHTML = BUILD_LOG.map(l => `
+    <div class="agent-row">
+      <div class="dot"></div>
+      <div class="name">${l.agent}</div>
+      <div class="task">${l.task}</div>
+      <div class="time">${l.time}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  STREAK / DAY TRACKING
+// ═══════════════════════════════════════════════════════════
+function markStudyToday() {
+  const today = new Date().toDateString();
+  if (state.lastStudyDate === today) return;
+  const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+  if (state.lastStudyDate === yesterday.toDateString()) state.streak++;
+  else state.streak = 1;
+  state.lastStudyDate = today;
+  saveState();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════
+window.addEventListener('load', () => {
+  updateTimerDisplay();
+  updatePomStats();
+  renderDashboard();
+});
+
+// Keyboard shortcut: space to flip flashcard
+document.addEventListener('keydown', (e) => {
+  if (e.code === 'Space' && document.getElementById('view-flashcards').classList.contains('active')) {
+    e.preventDefault();
+    if (!flashFlipped) flipCard();
+  }
+});
+</script>
+</body>
+</html>
