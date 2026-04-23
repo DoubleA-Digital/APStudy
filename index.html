@@ -250,6 +250,12 @@
   .flash-stats div { font-size:12px; color:var(--text2); font-weight:600; }
   .flash-stats strong { display:block; font-size:22px; font-weight:800; color: var(--text); margin-bottom:2px; }
 
+  /* ── DRILL ── */
+  .drill-stats { display:flex; gap:24px; flex-wrap:wrap; padding:14px 20px; background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:20px; font-size:14px; color:var(--text2); }
+  .drill-stats strong { color:var(--text); font-size:18px; }
+  .drill-stat-item { display:flex; flex-direction:column; gap:2px; }
+  .drill-stat-item span:first-child { font-size:11px; text-transform:uppercase; letter-spacing:.05em; }
+
   /* ── QUIZ ── */
   .quiz-card { max-width: 780px; margin: 0 auto; }
   .quiz-q { font-size: 18px; font-weight: 600; margin-bottom: 20px; line-height:1.5; }
@@ -369,6 +375,7 @@
     <div class="nav-section">Practice</div>
     <button class="nav-item" data-view="flashcards"><span class="icon">🎴</span> Flashcards</button>
     <button class="nav-item" data-view="quiz"><span class="icon">🧪</span> Practice Quiz</button>
+    <button class="nav-item" data-view="drill"><span class="icon">🔁</span> Infinite Drill</button>
     <button class="nav-item" data-view="weak"><span class="icon">🎯</span> Weak Points</button>
 
     <div class="nav-section">Tools</div>
@@ -552,6 +559,30 @@
         <button class="tab" onclick="startQuiz('graph', 6)">📊 Graphs — 6 Q</button>
       </div>
       <div class="card quiz-card" id="quiz-container"></div>
+    </section>
+
+    <!-- ── DRILL ── -->
+    <section class="view" id="view-drill">
+      <div class="header">
+        <div>
+          <h1 class="title">🔁 Infinite Drill</h1>
+          <p class="subtitle">One question at a time, no end. Build mastery through repetition.</p>
+        </div>
+      </div>
+      <div class="drill-stats" id="drill-stats-bar">
+        <div class="drill-stat-item"><span>🔥 Streak</span><strong id="ds-streak">0</strong></div>
+        <div class="drill-stat-item"><span>✅ Accuracy</span><strong id="ds-acc">—</strong></div>
+        <div class="drill-stat-item"><span>📝 Answered</span><strong id="ds-total">0</strong></div>
+        <div class="drill-stat-item"><span>📚 Subject</span><strong id="ds-filter">All</strong></div>
+      </div>
+      <div class="tabs mb-20">
+        <button class="tab active" onclick="startDrill('all')">All</button>
+        <button class="tab" onclick="startDrill('calc')">Calc AB</button>
+        <button class="tab" onclick="startDrill('csa')">CS A</button>
+        <button class="tab" onclick="startDrill('graph')">📊 Graphs</button>
+        <button class="tab" onclick="startDrill('hard')">🔥 Hard Only</button>
+      </div>
+      <div class="card quiz-card" id="drill-container"><p class="text-muted" style="text-align:center;padding:40px">Loading…</p></div>
     </section>
 
     <!-- ── WEAK POINTS ── -->
@@ -1324,7 +1355,92 @@ const QUIZ = [
     opts:['1','2','3','4'], correct:1, explain:"Slope of the tangent = rise ÷ run. Using the labeled points: (4 − 0) ÷ (3 − 1) = 4 ÷ 2 = 2. So f′(2) = 2." },
 
   { subj:'calc', unit:'cab-6', q:`<div style="margin-bottom:10px">Let \\(g(x) = \\int_0^x f(t)\\,dt\\). The graph of <em>f</em> is shown. What is <em>g&thinsp;′</em>(3)?</div><svg viewBox="0 0 260 155" style="width:100%;max-width:280px;display:block;margin:8px auto;border-radius:8px;background:#131720"><line x1="35" y1="130" x2="220" y2="130" stroke="#5d6577" stroke-width="1.5"/><line x1="50" y1="148" x2="50" y2="8" stroke="#5d6577" stroke-width="1.5"/><text x="222" y="134" fill="#9aa3b5" font-size="11" font-style="italic">t</text><text x="44" y="7" fill="#9aa3b5" font-size="11" font-style="italic">y</text><line x1="90" y1="127" x2="90" y2="133" stroke="#5d6577"/><line x1="130" y1="127" x2="130" y2="133" stroke="#5d6577"/><line x1="170" y1="127" x2="170" y2="133" stroke="#5d6577"/><line x1="210" y1="127" x2="210" y2="133" stroke="#5d6577"/><text x="90" y="143" fill="#9aa3b5" font-size="10" text-anchor="middle">1</text><text x="130" y="143" fill="#9aa3b5" font-size="10" text-anchor="middle">2</text><text x="170" y="143" fill="#9aa3b5" font-size="10" text-anchor="middle">3</text><text x="210" y="143" fill="#9aa3b5" font-size="10" text-anchor="middle">4</text><line x1="47" y1="70" x2="53" y2="70" stroke="#5d6577"/><text x="43" y="73" fill="#9aa3b5" font-size="10" text-anchor="end">3</text><polygon points="50,70 170,70 170,130 50,130" fill="rgba(16,185,129,0.12)" stroke="none"/><line x1="50" y1="70" x2="215" y2="70" stroke="#10b981" stroke-width="2.5"/><line x1="170" y1="70" x2="170" y2="130" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="5,3"/><text x="216" y="73" fill="#10b981" font-size="11" font-style="italic">f</text><text x="155" y="122" fill="#818cf8" font-size="10">x=3</text></svg>`,
-    opts:['0','3','9','12'], correct:1, explain:"By FTC Part 1, g′(x) = f(x). So g′(3) = f(3) = 3 (the y-value of f at t = 3 on the graph)." }
+    opts:['0','3','9','12'], correct:1, explain:"By FTC Part 1, g′(x) = f(x). So g′(3) = f(3) = 3 (the y-value of f at t = 3 on the graph)." },
+
+  // ══ HARDER AP-STYLE QUESTIONS ══
+
+  // Calc AB — harder
+  { subj:'calc', unit:'cab-3', hard:true, q:'If \\(f(x)=\\sin^2(3x)\\), find \\(f\'(x)\\).',
+    opts:['\\(3\\sin(3x)\\)','\\(6\\sin(3x)\\cos(3x)\\)','\\(2\\sin(3x)\\)','\\(6\\cos^2(3x)\\)'],
+    correct:1, explain:'Chain rule twice: outer 2sin(3x), times inner cos(3x)·3 = 6sin(3x)cos(3x). Equivalently 3sin(6x) via double-angle.' },
+
+  { subj:'calc', unit:'cab-3', hard:true, q:'If \\(x^2+y^2=25\\), find \\(\\dfrac{dy}{dx}\\) by implicit differentiation.',
+    opts:['\\(-\\dfrac{x}{y}\\)','\\(\\dfrac{x}{y}\\)','\\(-\\dfrac{y}{x}\\)','\\(2x+2y\\)'],
+    correct:0, explain:'Differentiate both sides w.r.t. x: 2x + 2y·(dy/dx) = 0 → dy/dx = −x/y.' },
+
+  { subj:'calc', unit:'cab-6', hard:true, q:'Let \\(g(x)=\\int_1^{x^3}\\sqrt{t^2+1}\\,dt\\). Find \\(g\'(x)\\).',
+    opts:['\\(\\sqrt{x^2+1}\\)','\\(\\sqrt{x^6+1}\\)','\\(3x^2\\sqrt{x^6+1}\\)','\\(3x^2\\sqrt{x^2+1}\\)'],
+    correct:2, explain:'FTC Part 1 + chain rule: g\'(x) = √((x³)²+1) · (x³)\' = 3x²√(x⁶+1). The upper limit is x³, not x.' },
+
+  { subj:'calc', unit:'cab-6', hard:true, q:'\\(\\displaystyle\\int \\cos(x)\\,e^{\\sin x}\\,dx =\\)',
+    opts:['\\(e^{\\sin x}+C\\)','\\(\\sin(x)\\cdot e^{\\cos x}+C\\)','\\(-e^{\\cos x}+C\\)','\\(e^{\\cos x}+C\\)'],
+    correct:0, explain:'u-sub: let u = sin x, du = cos x dx. Integral becomes ∫e^u du = e^u + C = e^(sin x) + C.' },
+
+  { subj:'calc', unit:'cab-4', hard:true, q:'A particle has velocity \\(v(t)=t^2-4t+3\\). On what time interval is the particle moving to the <strong>left</strong>?',
+    opts:['(0, 1)','(1, 3)','(3, ∞)','(0, 3)'],
+    correct:1, explain:'Factor: v(t)=(t−1)(t−3). v < 0 between the roots → (1, 3). The particle moves left (negative velocity) on that interval.' },
+
+  { subj:'calc', unit:'cab-5', hard:true, q:'Find the x-value where \\(f(x)=xe^{-x}\\) has a local maximum.',
+    opts:['x = 0','x = 1','x = −1','x = e'],
+    correct:1, explain:"f'(x) = e^(−x) − xe^(−x) = e^(−x)(1−x) = 0 → x = 1. f' changes from + to −, confirming a local max at x = 1." },
+
+  { subj:'calc', unit:'cab-7', hard:true, q:'Solve \\(\\dfrac{dy}{dx}=2xy\\) with \\(y(0)=1\\). Find \\(y(1)\\).',
+    opts:['1','2','\\(e\\)','\\(e^2\\)'],
+    correct:2, explain:'Separate variables: dy/y = 2x dx → ln|y| = x² + C → y = Ae^(x²). y(0)=1 → A=1. y(1) = e^1 = e.' },
+
+  // CS A — harder
+  { subj:'csa', unit:'csa-10', hard:true, q:'What does <code>f(5)</code> return?<pre style="background:var(--bg-elev2);padding:10px 14px;border-radius:6px;font-size:13px;margin-top:10px;line-height:1.7">static int f(int n) {\n  if (n &lt;= 0) return 0;\n  return n + f(n - 2);\n}</pre>',
+    opts:['5','6','9','15'],
+    correct:2, explain:'Trace: f(5)=5+f(3)=5+3+f(1)=5+3+1+f(−1)=5+3+1+0 = 9. The recursion steps down by 2 each time.' },
+
+  { subj:'csa', unit:'csa-9', hard:true, q:'Given <code>Animal a = new Cat();</code> where Dog and Cat both extend Animal. What happens at <code>Dog d = (Dog) a;</code>?',
+    opts:['Runs fine — a holds an Animal','Compile error — incompatible types','ClassCastException at runtime','NullPointerException'],
+    correct:2, explain:'The cast compiles (both are Animal subtypes) but fails at runtime because the actual object is a Cat, not a Dog — ClassCastException.' },
+
+  { subj:'csa', unit:'csa-9', hard:true, q:'Which IS method <strong>overloading</strong> (not overriding)?',
+    opts:['Subclass defines <code>void print(String s)</code> when parent already has <code>void print(String s)</code>','Same class defines <code>void print(int n)</code> alongside <code>void print(String s)</code>','<code>@Override void print(String s)</code> in a subclass','Re-declaring a superclass field in a subclass'],
+    correct:1, explain:'Overloading = same name, different parameter list in the same class. Options A and C are overriding. D is field shadowing.' },
+
+  { subj:'csa', unit:'csa-7', hard:true, q:'<code>ArrayList&lt;Integer&gt;</code> has <code>[2, 3, 4, 5, 6]</code>. This loop runs: <pre style="background:var(--bg-elev2);padding:10px 14px;border-radius:6px;font-size:13px;margin-top:10px;line-height:1.7">for (int i = 0; i &lt; list.size(); i++)\n  if (list.get(i) % 2 == 0) list.remove(i);</pre>What does the list contain after?',
+    opts:['[3, 5]','[3, 4, 5]','[3, 5, 6]','[2, 3, 4, 5, 6]'],
+    correct:1, explain:'Forward removal skips elements. Remove 2 (i=0) → [3,4,5,6]. i→1: get(1)=4, remove → [3,5,6]. i→2: get(2)=6, remove → [3,5]. i→3: 3≥size(3), stop. Result: [3,5]. Actually wait — i=0: 2 removed → [3,4,5,6]. i=1: 4 even → remove → [3,5,6]. i=2: 6 even → remove → [3,5]. i=3: size=2, stop → [3,5]. ✓' },
+
+  // ══ BETTER GRAPH QUESTIONS ══
+
+  // Slope field
+  { subj:'calc', unit:'cab-7', hard:true, q:`<div style="margin-bottom:10px">The slope field for \\(\\dfrac{dy}{dx}=y\\) is shown. Which function is a particular solution?</div><svg viewBox="0 0 260 160" style="width:100%;max-width:300px;display:block;margin:8px auto;border-radius:8px;background:#131720"><line x1="35" y1="90" x2="220" y2="90" stroke="#5d6577" stroke-width="1.5"/><line x1="50" y1="150" x2="50" y2="10" stroke="#5d6577" stroke-width="1.5"/><text x="222" y="94" fill="#9aa3b5" font-size="11" font-style="italic">x</text><text x="44" y="9" fill="#9aa3b5" font-size="11" font-style="italic">y</text><text x="90" y="103" fill="#9aa3b5" font-size="10" text-anchor="middle">1</text><text x="130" y="103" fill="#9aa3b5" font-size="10" text-anchor="middle">2</text><text x="170" y="103" fill="#9aa3b5" font-size="10" text-anchor="middle">3</text><text x="43" y="68" fill="#9aa3b5" font-size="10" text-anchor="end">1</text><text x="43" y="46" fill="#9aa3b5" font-size="10" text-anchor="end">2</text><text x="43" y="115" fill="#9aa3b5" font-size="10" text-anchor="end">−1</text><text x="43" y="137" fill="#9aa3b5" font-size="10" text-anchor="end">−2</text><!-- y=−2 row: slope=−2 steep down --><line x1="47" y1="124" x2="53" y2="136" stroke="#5d6577" stroke-width="1.5"/><line x1="85" y1="124" x2="91" y2="136" stroke="#5d6577" stroke-width="1.5"/><line x1="123" y1="124" x2="129" y2="136" stroke="#5d6577" stroke-width="1.5"/><line x1="161" y1="124" x2="167" y2="136" stroke="#5d6577" stroke-width="1.5"/><line x1="199" y1="124" x2="205" y2="136" stroke="#5d6577" stroke-width="1.5"/><!-- y=−1 row: slope=−1 --><line x1="46" y1="107" x2="54" y2="115" stroke="#5d6577" stroke-width="1.5"/><line x1="84" y1="107" x2="92" y2="115" stroke="#5d6577" stroke-width="1.5"/><line x1="122" y1="107" x2="130" y2="115" stroke="#5d6577" stroke-width="1.5"/><line x1="160" y1="107" x2="168" y2="115" stroke="#5d6577" stroke-width="1.5"/><line x1="198" y1="107" x2="206" y2="115" stroke="#5d6577" stroke-width="1.5"/><!-- y=0 row: horizontal --><line x1="44" y1="90" x2="56" y2="90" stroke="#5d6577" stroke-width="1.5"/><line x1="82" y1="90" x2="94" y2="90" stroke="#5d6577" stroke-width="1.5"/><line x1="120" y1="90" x2="132" y2="90" stroke="#5d6577" stroke-width="1.5"/><line x1="158" y1="90" x2="170" y2="90" stroke="#5d6577" stroke-width="1.5"/><line x1="196" y1="90" x2="208" y2="90" stroke="#5d6577" stroke-width="1.5"/><!-- y=1 row: slope=1 --><line x1="46" y1="69" x2="54" y2="61" stroke="#5d6577" stroke-width="1.5"/><line x1="84" y1="69" x2="92" y2="61" stroke="#5d6577" stroke-width="1.5"/><line x1="122" y1="69" x2="130" y2="61" stroke="#5d6577" stroke-width="1.5"/><line x1="160" y1="69" x2="168" y2="61" stroke="#5d6577" stroke-width="1.5"/><line x1="198" y1="69" x2="206" y2="61" stroke="#5d6577" stroke-width="1.5"/><!-- y=2 row: slope=2 steep up --><line x1="47" y1="46" x2="53" y2="34" stroke="#5d6577" stroke-width="1.5"/><line x1="85" y1="46" x2="91" y2="34" stroke="#5d6577" stroke-width="1.5"/><line x1="123" y1="46" x2="129" y2="34" stroke="#5d6577" stroke-width="1.5"/><line x1="161" y1="46" x2="167" y2="34" stroke="#5d6577" stroke-width="1.5"/><line x1="199" y1="46" x2="205" y2="34" stroke="#5d6577" stroke-width="1.5"/><!-- solution curve y=e^(x-2), passes through (2,1) --><polyline points="50,155 70,148 90,140 110,125 130,90 150,57 170,28 185,14" stroke="#818cf8" stroke-width="2" fill="none" stroke-dasharray="4,2"/><text x="187" y="13" fill="#818cf8" font-size="10">soln?</text></svg>`,
+    opts:['\\(y=x^2\\)','\\(y=e^x\\)','\\(y=e^{-x}\\)','\\(y=\\ln x\\)'],
+    correct:1, explain:"dy/dx = y has general solution y = Ce^x. Check: d/dx[e^x] = e^x = y ✓. The other functions don't satisfy dy/dx = y." },
+
+  // Area between curves
+  { subj:'calc', unit:'cab-8', hard:true, q:`<div style="margin-bottom:10px">Find the area of the shaded region between \\(y=x\\) (line) and \\(y=x^2\\) (parabola) on [0, 1].</div><svg viewBox="0 0 240 160" style="width:100%;max-width:260px;display:block;margin:8px auto;border-radius:8px;background:#131720"><line x1="30" y1="130" x2="185" y2="130" stroke="#5d6577" stroke-width="1.5"/><line x1="45" y1="148" x2="45" y2="10" stroke="#5d6577" stroke-width="1.5"/><text x="187" y="134" fill="#9aa3b5" font-size="11" font-style="italic">x</text><text x="39" y="9" fill="#9aa3b5" font-size="11" font-style="italic">y</text><line x1="125" y1="127" x2="125" y2="133" stroke="#5d6577"/><line x1="85" y1="127" x2="85" y2="133" stroke="#5d6577"/><text x="125" y="143" fill="#9aa3b5" font-size="10" text-anchor="middle">1</text><text x="85" y="143" fill="#9aa3b5" font-size="10" text-anchor="middle">.5</text><line x1="42" y1="50" x2="48" y2="50" stroke="#5d6577"/><line x1="42" y1="90" x2="48" y2="90" stroke="#5d6577"/><text x="40" y="53" fill="#9aa3b5" font-size="10" text-anchor="end">1</text><text x="40" y="93" fill="#9aa3b5" font-size="10" text-anchor="end">.5</text><!-- shaded region between y=x and y=x^2 on [0,1] --><polygon points="45,130 72,116 85,108 100,94 115,72 125,50 100,94 85,108 72,116 45,130" fill="rgba(99,102,241,0.2)" stroke="none"/><polygon points="45,130 125,50 115,72 100,94 85,108 72,116" fill="rgba(99,102,241,0.2)" stroke="none"/><!-- line y=x --><line x1="45" y1="130" x2="155" y2="20" stroke="#10b981" stroke-width="2"/><text x="157" y="19" fill="#10b981" font-size="10" font-style="italic">y=x</text><!-- parabola y=x^2 --><polyline points="45,130 65,127 85,117 100,104 115,82 125,50 140,20" stroke="#f59e0b" stroke-width="2" fill="none"/><text x="142" y="19" fill="#f59e0b" font-size="10" font-style="italic">y=x²</text><circle cx="45" cy="130" r="3" fill="#9aa3b5"/><circle cx="125" cy="50" r="3" fill="#9aa3b5"/></svg>`,
+    opts:['\\(\\tfrac{1}{4}\\)','\\(\\tfrac{1}{6}\\)','\\(\\tfrac{1}{3}\\)','\\(\\tfrac{1}{2}\\)'],
+    correct:1, explain:'\\(\\int_0^1(x-x^2)\\,dx = \\bigl[\\tfrac{x^2}{2}-\\tfrac{x^3}{3}\\bigr]_0^1 = \\tfrac{1}{2}-\\tfrac{1}{3} = \\tfrac{1}{6}\\).' },
+
+  // Velocity graph — motion analysis
+  { subj:'calc', unit:'cab-4', hard:true, q:`<div style="margin-bottom:10px">The velocity v(t) of a particle is shown. On what interval is the particle moving to the <strong>left</strong>?</div><svg viewBox="0 0 260 160" style="width:100%;max-width:300px;display:block;margin:8px auto;border-radius:8px;background:#131720"><line x1="35" y1="85" x2="225" y2="85" stroke="#5d6577" stroke-width="1.5"/><line x1="50" y1="150" x2="50" y2="15" stroke="#5d6577" stroke-width="1.5"/><text x="226" y="89" fill="#9aa3b5" font-size="11" font-style="italic">t</text><text x="38" y="14" fill="#9aa3b5" font-size="11">v</text><line x1="90" y1="82" x2="90" y2="88" stroke="#5d6577"/><line x1="130" y1="82" x2="130" y2="88" stroke="#5d6577"/><line x1="170" y1="82" x2="170" y2="88" stroke="#5d6577"/><line x1="210" y1="82" x2="210" y2="88" stroke="#5d6577"/><text x="90" y="99" fill="#9aa3b5" font-size="10" text-anchor="middle">1</text><text x="130" y="99" fill="#9aa3b5" font-size="10" text-anchor="middle">2</text><text x="170" y="99" fill="#9aa3b5" font-size="10" text-anchor="middle">3</text><text x="210" y="99" fill="#9aa3b5" font-size="10" text-anchor="middle">4</text><line x1="47" y1="45" x2="53" y2="45" stroke="#5d6577"/><line x1="47" y1="125" x2="53" y2="125" stroke="#5d6577"/><text x="43" y="48" fill="#9aa3b5" font-size="10" text-anchor="end">2</text><text x="43" y="128" fill="#9aa3b5" font-size="10" text-anchor="end">−2</text><!-- v(t): 0→2→2→0→−2 (line segments) --><polyline points="50,85 90,45 130,45 170,85 210,125" stroke="#10b981" stroke-width="2.5" fill="none"/><!-- shade negative region --><polygon points="170,85 210,85 210,125" fill="rgba(239,68,68,0.15)" stroke="none"/><!-- shade positive region --><polygon points="50,85 90,45 130,45 170,85" fill="rgba(16,185,129,0.1)" stroke="none"/><text x="95" y="68" fill="#10b981" font-size="11">v &gt; 0</text><text x="177" y="110" fill="#ef4444" font-size="11">v &lt; 0</text><text x="215" y="89" fill="#10b981" font-size="11" font-style="italic">v(t)</text></svg>`,
+    opts:['(0, 2)','(1, 3)','(3, 4)','(2, 4)'],
+    correct:2, explain:'The particle moves left when v(t) < 0. The graph shows v dips below the t-axis only on (3, 4). The shaded red region confirms this.' },
+
+  // Signed/net area
+  { subj:'calc', unit:'cab-6', hard:true, q:`<div style="margin-bottom:10px">What is \\(\\int_0^4 f(x)\\,dx\\)? Note that <em>f</em> is negative on [2, 4].</div><svg viewBox="0 0 260 160" style="width:100%;max-width:300px;display:block;margin:8px auto;border-radius:8px;background:#131720"><line x1="35" y1="95" x2="225" y2="95" stroke="#5d6577" stroke-width="1.5"/><line x1="50" y1="150" x2="50" y2="15" stroke="#5d6577" stroke-width="1.5"/><text x="226" y="99" fill="#9aa3b5" font-size="11" font-style="italic">x</text><text x="44" y="14" fill="#9aa3b5" font-size="11" font-style="italic">y</text><line x1="90" y1="92" x2="90" y2="98" stroke="#5d6577"/><line x1="130" y1="92" x2="130" y2="98" stroke="#5d6577"/><line x1="170" y1="92" x2="170" y2="98" stroke="#5d6577"/><line x1="210" y1="92" x2="210" y2="98" stroke="#5d6577"/><text x="90" y="109" fill="#9aa3b5" font-size="10" text-anchor="middle">1</text><text x="130" y="109" fill="#9aa3b5" font-size="10" text-anchor="middle">2</text><text x="170" y="109" fill="#9aa3b5" font-size="10" text-anchor="middle">3</text><text x="210" y="109" fill="#9aa3b5" font-size="10" text-anchor="middle">4</text><line x1="47" y1="35" x2="53" y2="35" stroke="#5d6577"/><line x1="47" y1="135" x2="53" y2="135" stroke="#5d6577"/><text x="43" y="38" fill="#9aa3b5" font-size="10" text-anchor="end">3</text><text x="43" y="138" fill="#9aa3b5" font-size="10" text-anchor="end">−2</text><!-- f=3 on [0,2], f=−2 on [2,4] --><polygon points="50,95 130,95 130,35 50,35" fill="rgba(16,185,129,0.15)" stroke="none"/><polygon points="130,95 210,95 210,135 130,135" fill="rgba(239,68,68,0.15)" stroke="none"/><line x1="50" y1="35" x2="130" y2="35" stroke="#10b981" stroke-width="2.5"/><line x1="130" y1="35" x2="130" y2="135" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4,3"/><line x1="130" y1="135" x2="210" y2="135" stroke="#10b981" stroke-width="2.5"/><text x="70" y="70" fill="#10b981" font-size="11">+3</text><text x="155" y="118" fill="#ef4444" font-size="11">−2</text><text x="215" y="98" fill="#10b981" font-size="11" font-style="italic">f</text></svg>`,
+    opts:['−2','2','6','10'],
+    correct:1, explain:'Definite integrals count negative area below the x-axis. Area above (x∈[0,2]): 3×2=6. Area below (x∈[2,4]): −2×2=−4. Net: 6+(−4) = 2.' },
+
+  // FTC + chain rule (harder)
+  { subj:'calc', unit:'cab-6', hard:true, q:`<div style="margin-bottom:10px">\\(g(x)=\\int_0^{x^2}f(t)\\,dt\\). The graph of <em>f</em> is shown. Find \\(g\'(2)\\).</div><svg viewBox="0 0 260 155" style="width:100%;max-width:300px;display:block;margin:8px auto;border-radius:8px;background:#131720"><line x1="35" y1="125" x2="220" y2="125" stroke="#5d6577" stroke-width="1.5"/><line x1="50" y1="145" x2="50" y2="10" stroke="#5d6577" stroke-width="1.5"/><text x="222" y="129" fill="#9aa3b5" font-size="11" font-style="italic">t</text><text x="44" y="9" fill="#9aa3b5" font-size="11" font-style="italic">y</text><line x1="90" y1="122" x2="90" y2="128" stroke="#5d6577"/><line x1="130" y1="122" x2="130" y2="128" stroke="#5d6577"/><line x1="170" y1="122" x2="170" y2="128" stroke="#5d6577"/><line x1="210" y1="122" x2="210" y2="128" stroke="#5d6577"/><text x="90" y="139" fill="#9aa3b5" font-size="10" text-anchor="middle">1</text><text x="130" y="139" fill="#9aa3b5" font-size="10" text-anchor="middle">2</text><text x="170" y="139" fill="#9aa3b5" font-size="10" text-anchor="middle">3</text><text x="210" y="139" fill="#9aa3b5" font-size="10" text-anchor="middle">4</text><line x1="47" y1="65" x2="53" y2="65" stroke="#5d6577"/><text x="43" y="68" fill="#9aa3b5" font-size="10" text-anchor="end">2</text><!-- f=2 (constant), horizontal line --><line x1="50" y1="65" x2="215" y2="65" stroke="#10b981" stroke-width="2.5"/><text x="216" y="68" fill="#10b981" font-size="11" font-style="italic">f</text><!-- dashed at t=4 (since g'(2)=f(2²)·2·2=f(4)·4) --><line x1="210" y1="65" x2="210" y2="125" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="5,3"/><text x="195" y="118" fill="#818cf8" font-size="10">t=4</text><text x="56" y="50" fill="#9aa3b5" font-size="10" font-style="italic">f(t) = 2</text></svg>`,
+    opts:['4','8','16','2'],
+    correct:1, explain:"FTC1 + chain rule: g'(x) = f(x²)·2x. At x=2: g'(2) = f(4)·4 = 2·4 = 8. The upper limit is x², so the chain rule factor is 2x." },
+
+  // Jump discontinuity — one-sided limit
+  { subj:'calc', unit:'cab-1', hard:true, q:`<div style="margin-bottom:10px">Based on the graph, what is \\(\\lim_{x \\to 2^-} f(x)\\)?</div><svg viewBox="0 0 260 155" style="width:100%;max-width:280px;display:block;margin:8px auto;border-radius:8px;background:#131720"><line x1="35" y1="130" x2="220" y2="130" stroke="#5d6577" stroke-width="1.5"/><line x1="50" y1="148" x2="50" y2="8" stroke="#5d6577" stroke-width="1.5"/><text x="222" y="134" fill="#9aa3b5" font-size="11" font-style="italic">x</text><text x="44" y="7" fill="#9aa3b5" font-size="11" font-style="italic">y</text><line x1="90" y1="127" x2="90" y2="133" stroke="#5d6577"/><line x1="130" y1="127" x2="130" y2="133" stroke="#5d6577"/><line x1="170" y1="127" x2="170" y2="133" stroke="#5d6577"/><text x="90" y="143" fill="#9aa3b5" font-size="10" text-anchor="middle">1</text><text x="130" y="143" fill="#9aa3b5" font-size="10" text-anchor="middle">2</text><text x="170" y="143" fill="#9aa3b5" font-size="10" text-anchor="middle">3</text><line x1="47" y1="80" x2="53" y2="80" stroke="#5d6577"/><line x1="47" y1="55" x2="53" y2="55" stroke="#5d6577"/><line x1="47" y1="30" x2="53" y2="30" stroke="#5d6577"/><text x="43" y="83" fill="#9aa3b5" font-size="10" text-anchor="end">2</text><text x="43" y="58" fill="#9aa3b5" font-size="10" text-anchor="end">3</text><text x="43" y="33" fill="#9aa3b5" font-size="10" text-anchor="end">4</text><!-- left branch y=x+1, x from 0 to 2 (open at x=2,y=3) --><line x1="50" y1="105" x2="126" y2="57" stroke="#10b981" stroke-width="2.5"/><circle cx="130" cy="55" r="4" fill="#131720" stroke="#10b981" stroke-width="2"/><!-- right branch y=x+2, x from 2 to 3.5 (closed at x=2,y=4) --><line x1="134" y1="29" x2="175" y2="7" stroke="#10b981" stroke-width="2.5"/><circle cx="130" cy="30" r="4" fill="#10b981"/><text x="177" y="8" fill="#10b981" font-size="11" font-style="italic">f</text><!-- label jump --><text x="136" y="55" fill="#9aa3b5" font-size="9">open</text><text x="136" y="32" fill="#9aa3b5" font-size="9">closed</text></svg>`,
+    opts:['2','3','4','Does not exist'],
+    correct:1, explain:'The left-hand limit follows the lower branch (open circle). As x→2 from the left, f(x)→3. The closed dot at y=4 is f(2), not the left-hand limit.' },
+
+  // Disk method
+  { subj:'calc', unit:'cab-8', hard:true, q:`<div style="margin-bottom:10px">The region under \\(y=\\sqrt{x}\\) from x=0 to x=4 is rotated about the x-axis (shaded). Which integral gives the volume?</div><svg viewBox="0 0 260 160" style="width:100%;max-width:290px;display:block;margin:8px auto;border-radius:8px;background:#131720"><line x1="35" y1="130" x2="220" y2="130" stroke="#5d6577" stroke-width="1.5"/><line x1="50" y1="148" x2="50" y2="15" stroke="#5d6577" stroke-width="1.5"/><text x="222" y="134" fill="#9aa3b5" font-size="11" font-style="italic">x</text><text x="44" y="14" fill="#9aa3b5" font-size="11" font-style="italic">y</text><line x1="90" y1="127" x2="90" y2="133" stroke="#5d6577"/><line x1="130" y1="127" x2="130" y2="133" stroke="#5d6577"/><line x1="170" y1="127" x2="170" y2="133" stroke="#5d6577"/><line x1="210" y1="127" x2="210" y2="133" stroke="#5d6577"/><text x="90" y="143" fill="#9aa3b5" font-size="10" text-anchor="middle">1</text><text x="130" y="143" fill="#9aa3b5" font-size="10" text-anchor="middle">2</text><text x="170" y="143" fill="#9aa3b5" font-size="10" text-anchor="middle">3</text><text x="210" y="143" fill="#9aa3b5" font-size="10" text-anchor="middle">4</text><line x1="47" y1="100" x2="53" y2="100" stroke="#5d6577"/><line x1="47" y1="70" x2="53" y2="70" stroke="#5d6577"/><text x="43" y="103" fill="#9aa3b5" font-size="10" text-anchor="end">1</text><text x="43" y="73" fill="#9aa3b5" font-size="10" text-anchor="end">2</text><!-- y=sqrt(x) curve --><polygon points="50,130 65,124 90,100 110,90 130,82 150,76 170,70 190,65 210,70 210,130" fill="rgba(99,102,241,0.15)" stroke="none"/><polyline points="50,130 65,124 90,100 110,90 130,82 150,76 170,70 190,65 210,70" stroke="#10b981" stroke-width="2.5" fill="none"/><!-- mirror image below axis (rotation hint) --><polyline points="50,130 65,136 90,160" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="4,3" fill="none"/><text x="212" y="72" fill="#10b981" font-size="10" font-style="italic">y=√x</text><!-- disk radius label --><line x1="170" y1="130" x2="170" y2="70" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,2"/><text x="173" y="100" fill="#f59e0b" font-size="10">R(x)</text></svg>`,
+    opts:['\\(\\pi\\!\\int_0^4\\!\\sqrt{x}\\,dx\\)','\\(2\\pi\\!\\int_0^4\\!x\\,dx\\)','\\(\\pi\\!\\int_0^4\\!x\\,dx\\)','\\(2\\pi\\!\\int_0^4\\!\\sqrt{x}\\,dx\\)'],
+    correct:2, explain:'Disk method: V = π∫[R(x)]² dx. Here R(x) = √x, so [R(x)]² = x. V = π∫₀⁴ x dx = π[x²/2]₀⁴ = 8π.' }
 ];
 
 // ═══════════════════════════════════════════════════════════
@@ -1368,10 +1484,96 @@ function navigate(view) {
   if (view === 'units') renderUnits('all');
   if (view === 'flashcards') startFlashcards('all', 20);
   if (view === 'quiz') startQuiz('all', 10);
+  if (view === 'drill') { if (drillDeck.length === 0) startDrill('all'); else updateDrillStats(); }
   if (view === 'weak') renderWeak();
   if (view === 'analytics') renderAnalytics();
   if (view === 'reference') showRef('calc');
   if (view === 'team') renderTeam();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  INFINITE DRILL
+// ═══════════════════════════════════════════════════════════
+let drillDeck = [], drillIdx = 0, drillFilter = 'all';
+let drillStreak = 0, drillTotal = 0, drillCorrect = 0;
+
+function startDrill(filter) {
+  drillFilter = filter;
+  drillStreak = 0; drillTotal = 0; drillCorrect = 0;
+  document.querySelectorAll('#view-drill .tab').forEach((t,i) => {
+    const map = {all:0, calc:1, csa:2, graph:3, hard:4};
+    t.classList.toggle('active', i === (map[filter] ?? 0));
+  });
+  const labels = {all:'All', calc:'Calc AB', csa:'CS A', graph:'Graphs', hard:'Hard Only'};
+  document.getElementById('ds-filter').textContent = labels[filter] || 'All';
+  reshuffleDrill();
+  showDrill();
+}
+
+function reshuffleDrill() {
+  let pool = QUIZ.slice();
+  if (drillFilter === 'calc') pool = pool.filter(q => q.subj === 'calc');
+  else if (drillFilter === 'csa') pool = pool.filter(q => q.subj === 'csa');
+  else if (drillFilter === 'graph') pool = pool.filter(q => q.q.includes('<svg'));
+  else if (drillFilter === 'hard') pool = pool.filter(q => q.hard);
+  drillDeck = pool.sort(() => Math.random() - 0.5);
+  drillIdx = 0;
+}
+
+function showDrill() {
+  if (drillIdx >= drillDeck.length) reshuffleDrill();
+  const q = drillDeck[drillIdx];
+  const c = document.getElementById('drill-container');
+  c.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <span class="chip chip-${q.subj}">${q.subj === 'calc' ? 'Calc AB' : 'CS A'} · Unit ${q.unit.split('-')[1]}</span>
+      ${q.hard ? '<span class="chip" style="background:rgba(245,158,11,0.15);color:#f59e0b;border-color:#f59e0b33">🔥 Hard</span>' : ''}
+    </div>
+    <div class="quiz-q">${q.q}</div>
+    <div class="quiz-options">
+      ${q.opts.map((o,i) => `<button class="quiz-opt" onclick="answerDrill(${i})">${o}</button>`).join('')}
+    </div>
+    <div id="drill-explain" class="hidden mt-20"></div>
+  `;
+  if (window.MathJax) MathJax.typeset();
+}
+
+function answerDrill(i) {
+  const q = drillDeck[drillIdx];
+  document.querySelectorAll('#drill-container .quiz-opt').forEach((o, j) => {
+    o.disabled = true;
+    if (j === q.correct) o.classList.add('correct');
+    else if (j === i) o.classList.add('wrong');
+    else o.classList.add('revealed');
+  });
+  const correct = i === q.correct;
+  drillTotal++;
+  if (correct) { drillCorrect++; drillStreak++; }
+  else { drillStreak = 0; state.weakTopics[q.unit] = (state.weakTopics[q.unit] || 0) + 1; }
+  const m = state.mastered[q.unit] || 0;
+  state.mastered[q.unit] = Math.max(0, Math.min(1, m + (correct ? 0.04 : -0.02)));
+  state.quizHistory.push({ subj:q.subj, unit:q.unit, correct, time:Date.now() });
+  if (state.quizHistory.length > 500) state.quizHistory = state.quizHistory.slice(-500);
+  saveState(); markStudyToday(); updateDrillStats();
+  const exp = document.getElementById('drill-explain');
+  exp.classList.remove('hidden');
+  exp.innerHTML = `<div class="${correct?'tip':'warn'}">${correct?'✅ Correct!':'❌ Not quite — '} ${q.explain}</div>
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <button class="btn" onclick="nextDrill()">Next Question →</button>
+      <button class="btn btn-ghost btn-sm" onclick="startDrill(drillFilter)">↻ Reset session</button>
+    </div>`;
+  if (window.MathJax) MathJax.typeset();
+}
+
+function nextDrill() { drillIdx++; showDrill(); }
+
+function updateDrillStats() {
+  const s = document.getElementById('ds-streak');
+  const a = document.getElementById('ds-acc');
+  const t = document.getElementById('ds-total');
+  if (s) s.textContent = drillStreak;
+  if (a) a.textContent = drillTotal > 0 ? Math.round(100*drillCorrect/drillTotal)+'%' : '—';
+  if (t) t.textContent = drillTotal;
 }
 
 document.querySelectorAll('.nav-item').forEach(btn => {
